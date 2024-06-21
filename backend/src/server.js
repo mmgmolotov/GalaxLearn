@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const authRoutes = require('./routes/authRoutes'); // Correct path to authRoutes
+const authRoutes = require('./routes/authRoutes');
 
 dotenv.config();
 
