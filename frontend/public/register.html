@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - GalaxLearn</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                    <option value="">Select...</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p id="successMessage" style="display:none;color:green;">Registration successful! Redirecting to login...</p>
+        <p id="errorMessage" style="display:none;color:red;"></p> <!-- Error message element -->
+        <p><a href="login.html">Already have an account? Login here</a></p>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                name: form.name.value,
+                email: form.email.value,
+                password: form.password.value,
+                confirmPassword: form.confirmPassword.value,
+                role: form.role.value,
+            };
+
+            if (data.password !== data.confirmPassword) {
+                document.getElementById('errorMessage').textContent = 'Passwords do not match';
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('errorMessage').style.display = 'none';
+
+            fetch('http://localhost:5000/api/auth/register', { // Correct backend URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: data.name,
+                    email: data.email,
+                    password: data.password,
+                    role: data.role,
+                }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // If response is not ok, try to parse the response text to provide more context
+                    return response.text().then(text => {
+                        throw new Error(`HTTP error! status: ${response.status}, response: ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    document.getElementById('errorMessage').textContent = result.message;
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').textContent = 'An error occurred during registration. Please try again.';
+                document.getElementById('errorMessage').style.display = 'block';
+                console.error('Error during registration:', error);
+            });
+        });
+    </script>
+</body>
+</html>

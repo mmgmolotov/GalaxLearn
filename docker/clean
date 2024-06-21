@@ -1,0 +1,15 @@
+# Stop all running containers
+docker stop $(docker ps -aq)
+
+# Remove all containers
+docker rm $(docker ps -aq)
+
+# Remove all volumes
+docker volume rm $(docker volume ls -q)
+
+# Remove all images
+docker rmi $(docker images -q)
+
+# Clean up unused Docker data
+docker system prune -a -f --volumes
+

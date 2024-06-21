@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby - GalaxLearn</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Lobby</h1>
+        <p>Select an option to continue:</p>
+        <ul>
+            <li><a href="/courses.html">View Courses</a></li>
+            <li><a href="/profile.html">View Profile</a></li>
+            <li><a href="/settings.html">Settings</a></li>
+        </ul>
+        <p><a href="/login.html" onclick="logout()">Logout</a></p>
+    </div>
+
+    <script>
+        function logout() {
+            // Clear session or token if necessary
+            alert('Logged out');
+        }
+    </script>
+</body>
+</html>

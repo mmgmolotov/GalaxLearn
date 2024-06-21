@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GalaxLearn</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p id="errorMessage" style="display:none;color:red;"></p>
+        <p><a href="register.html">Don't have an account? Register here</a></p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = {
+                email: form.email.value,
+                password: form.password.value,
+            };
+
+            fetch('http://localhost:5000/api/auth/login', { // Update to correct backend URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    window.location.href = 'lobby.html'; // Redirect on successful login
+                } else {
+                    document.getElementById('errorMessage').innerText = result.message;
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                document.getElementById('errorMessage').innerText = 'An error occurred during login. Please try again.';
+                document.getElementById('errorMessage').style.display = 'block';
+                console.error('Error during login:', error);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>GalaxLearn - Welcome</title>
+    <style>
+        /* Basic CSS to ensure visibility and layout */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        main {
+            flex: 1;
+            padding: 1em;
+            box-sizing: border-box;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 1em;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        /* Centering the buttons */
+        .actions {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100%; /* Full height for vertical centering */
+        }
+        .inputBx {
+            margin: 0 10px; /* Space between buttons */
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header section with navigation -->
+    <header>
+        <h1>GalaxLearn</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Main content area with welcome message and additional text -->
+    <main>
+        <section class="introduction">
+            <h2>Welcome to GalaxLearn</h2>
+            <p>GalaxLearn is your gateway to a world of knowledge and learning. Whether you are here to advance your career, explore new hobbies, or gain new skills, we provide a platform to support your educational journey.</p>
+            <p>Our mission is to make learning accessible and engaging for everyone. Join us today and start your adventure into the world of knowledge.</p>
+        </section>
+
+        <!-- Login and Register buttons with descriptions -->
+        <section class="actions">
+            <div class="inputBx">
+                <button class="btn" onclick="location.href='login.html'">Login</button>
+            </div>
+            <div class="inputBx">
+                <button class="btn" onclick="location.href='register.html'">Register</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer section -->
+    <footer>
+        <p>&copy; 2024 GalaxLearn. All rights reserved.</p>
+    </footer>
+
+    <!-- Debugging JavaScript to check if buttons are working -->
+    <script>
+        // Check if the Login or Register button is clicked
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                console.log(button.textContent + ' button clicked');
+            });
+        });
+    </script>
+</body>
+</html>

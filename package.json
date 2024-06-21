@@ -1,0 +1,22 @@
+{
+  "name": "galaxlearn",
+  "version": "1.0.0",
+  "description": "Student_teacher orbit",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "soon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "GalaxLearn.git"
+  },
+  "keywords": [
+    "galaxlearn"
+  ],
+  "author": "Marouane Lachheb - othman achlouj - fatima ezzahrae rbouh",
+  "license": "ISC"
+}
