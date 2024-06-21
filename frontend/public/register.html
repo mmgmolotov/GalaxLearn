@@ -5,45 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - GalaxLearn</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet"> <!-- Include the serious font -->
 </head>
 <body>
-    <div class="square">
-        <i style="--clr:#00ff0a;"></i>
-        <i style="--clr:#ff0057;"></i>
-        <i style="--clr:#fffd44;"></i>
-    </div>
-    <div class="form-container">
-        <h2>Register</h2>
-        <form id="registerForm">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
-            </div>
-            <div class="form-group">
-                <label for="role">Role:</label>
-                <select id="role" name="role" required>
-                    <option value="">Select...</option>
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                </select>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-        <p id="successMessage" style="display:none;color:green;">Registration successful! Redirecting to login...</p>
-        <p id="errorMessage" style="display:none;color:red;"></p>
-        <p><a href="login.html">Already have an account? Login here</a></p>
+    <div class="container">
+        <div class="image-container">
+            <img src="images/galax auth.webp" alt="Background Image">
+        </div>
+        <div class="form-container">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role:</label>
+                    <select id="role" name="role" required>
+                        <option value="">Select...</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <p id="successMessage" style="display:none;color:green;">Registration successful! Redirecting to login...</p>
+            <p id="errorMessage" style="display:none;color:red;"></p>
+            <p><a href="login.html">Already have an account? Login here</a></p>
+        </div>
     </div>
 
     <script>

@@ -23,7 +23,7 @@ body {
   background-color: rgba(0, 0, 0, 0.7); /* Transparent dark background for form */
 }
 
-/* Form container styling */
+/* Form container styling for the right side */
 .form-container {
   padding: 40px;
   width: 50%;
@@ -53,8 +53,10 @@ body {
 }
 
 /* Input fields styling */
+.form-group input[type="text"],
 .form-group input[type="email"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group select {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
@@ -125,7 +127,7 @@ a:hover {
   height: 24px;
 }
 
-/* Image container styling */
+/* Image container styling for the left side */
 .image-container {
   width: 50%;
   position: relative;
