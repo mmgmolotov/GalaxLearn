@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="square">
+        <i style="--clr:#00ff0a;"></i>
+        <i style="--clr:#ff0057;"></i>
+        <i style="--clr:#fffd44;"></i>
+    </div>
     <div class="form-container">
         <h2>Register</h2>
         <form id="registerForm">
@@ -37,7 +42,7 @@
             <button type="submit">Register</button>
         </form>
         <p id="successMessage" style="display:none;color:green;">Registration successful! Redirecting to login...</p>
-        <p id="errorMessage" style="display:none;color:red;"></p> <!-- Error message element -->
+        <p id="errorMessage" style="display:none;color:red;"></p>
         <p><a href="login.html">Already have an account? Login here</a></p>
     </div>
 
@@ -61,7 +66,7 @@
 
             document.getElementById('errorMessage').style.display = 'none';
 
-            fetch('http://localhost:5000/api/auth/register', { // Correct backend URL
+            fetch('http://localhost:5000/api/auth/register', { // Update to correct backend URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,15 +78,7 @@
                     role: data.role,
                 }),
             })
-            .then(response => {
-                if (!response.ok) {
-                    // If response is not ok, try to parse the response text to provide more context
-                    return response.text().then(text => {
-                        throw new Error(`HTTP error! status: ${response.status}, response: ${text}`);
-                    });
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(result => {
                 if (result.success) {
                     document.getElementById('successMessage').style.display = 'block';

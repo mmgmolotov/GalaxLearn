@@ -1,108 +1,138 @@
-/* Base styles for the body */
+/* style.css */
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
   margin: 0;
-  padding: 0;
+  font-family: Courier, monospace;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url('../images/galax\ auth.webp'); /* Replace with the path to your background image */
+  background-size: cover; /* Ensures the image covers the whole page */
+  background-position: center; /* Center the image */
 }
 
-/* Header styling */
-header {
+/* Container for the form and image */
+.container {
+  display: flex;
+  width: 800px;
+  height: 500px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7); /* Transparent dark background for form */
+}
+
+/* Form container styling */
+.form-container {
+  padding: 40px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #ffffff; /* Light text for contrast */
+}
+
+/* Form heading styling */
+.form-container h2 {
+  color: #A9CCE3; /* Light blue from the image */
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* Form group styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #EBF5FB; /* Light, soft white from the image */
+}
+
+/* Input fields styling */
+.form-group input[type="email"],
+.form-group input[type="password"] {
   width: 100%;
-  background-color: #333;
-  padding: 10px 0;
-  text-align: center;
-  color: white;
-}
-
-/* Navigation link styling */
-nav a {
-  margin: 0 10px;
-  color: white;
-  text-decoration: none;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* Main content area styling */
-main {
-  width: 60%;
-  margin: 20px auto;
-  background-color: white;
-  padding: 20px;
+  padding: 10px;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #D5DBDB; /* Soft grey from the image */
+  background-color: #566573; /* Dark background for inputs */
+  color: #ffffff;
+  font-size: 14px;
 }
 
-/* Section for introduction text */
-.introduction {
-  margin-bottom: 20px;
+/* Checkbox styling */
+.form-group input[type="checkbox"] {
+  margin-right: 5px;
 }
 
-/* Styling for the welcome text */
-.login h2 {
-  color: #333;
-  font-size: 2em;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
+label[for="rememberMe"] {
+  color: #D5DBDB; /* Matching checkbox label with input borders */
 }
 
-/* Button styling provided */
+/* Button styling */
 button {
-  position: relative;
-  display: inline-block;
-  margin: 15px;
-  padding: 15px 30px;
-  text-align: center;
-  font-size: 18px;
-  letter-spacing: 1px;
-  text-decoration: none;
-  color: #725AC1;
-  background: transparent;
+  background-color: #5DADE2; /* Light blue from the image */
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
-  transition: ease-out 0.5s;
-  border: 2px solid #725AC1;
-  border-radius: 10px;
-  box-shadow: inset 0 0 0 0 #725AC1;
+  color: white;
+  margin-top: 10px;
 }
 
 button:hover {
-  color: white;
-  box-shadow: inset 0 -100px 0 0 #725AC1;
+  background-color: #3498DB; /* Slightly darker blue on hover */
 }
 
-button:active {
-  transform: scale(0.9);
+/* Paragraph text styling */
+p {
+  font-size: 14px;
+  color: #D5DBDB; /* Soft grey for links and additional text */
 }
 
-/* Footer styling */
-footer {
+/* Links styling */
+a {
+  color: #A9CCE3; /* Light blue from the image */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Social login text styling */
+.social-login {
+  margin-top: 20px;
+  font-size: 14px;
   text-align: center;
-  padding: 10px;
-  background-color: #333;
-  color: white;
-  width: 100%;
+  color: #D5DBDB; /* Soft grey for consistency */
 }
 
-/* Container for button positioning and visibility */
-.inputBx {
+/* Social icons container */
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.social-icons img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Image container styling */
+.image-container {
+  width: 50%;
   position: relative;
 }
-/* Check these selectors for potentially problematic styles */
-.nav-buttons a {
-  pointer-events: auto; /* Ensure clicks are enabled */
-  z-index: 1; /* Ensure no unexpected layering issues */
-}
 
-body, html {
-  /* Check for any positioning that might block interactions */
-  position: static;
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
