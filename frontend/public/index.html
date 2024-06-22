@@ -3,216 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>GalaxLearn - Welcome</title>
     <style>
-        body, h1, h2, h3, h4, h5, h6 {font-family: "Raleway", sans-serif}
+        /* Global Styles */
+        body, h1, h2, h3, h4, h5, h6 {
+            font-family: "Raleway", sans-serif;
+        }
         body, html {
             height: 100%;
             line-height: 1.8;
             margin: 0;
             padding: 0;
         }
-
-        .bgimg-1 {
-            background-position: center;
-            background-size: cover;
-            background-image: url('images/glaxlearn1.webp');
-            min-height: 100%;
-        }
-
-        .w3-bar .w3-button {
-            padding: 16px;
-        }
-
-        .introduction {
-            padding: 64px 16px;
-            text-align: center;
-            color: rgb(0, 0, 0);
-        }
-
-        .introduction h2 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-
-        .introduction p {
-            font-size: 1.2em;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-
-        .inputBx {
-            margin: 0 10px;
-        }
-
-        .btn {
+        
+        /* Navbar Styles */
+        .navbar {
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .profile-avatar {
+        .navbar a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px 16px;
+            display: inline-block;
+            transition: color 0.3s;
+        }
+        .navbar a:hover {
+            color: #007BFF;
+        }
+        .navbar .brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .profile-avatar {
             border-radius: 50%;
             height: 40px;
             width: 40px;
-            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .navbar .username {
+            margin-right: 20px;
+            font-size: 1em;
             cursor: pointer;
         }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .username {
-            margin-left: 10px;
-            font-size: 16px;
+        .navbar .toggle-button {
+            display: none;
+            font-size: 1.5em;
             cursor: pointer;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+        }
+        .sidebar a {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Header Styles */
+        .bgimg-1 {
+            background-position: center;
+            background-size: cover;
+            background-image: url('images/index.webp'); /* Ensure this path is correct */
+            min-height: 100%;
+            position: relative;
+        }
+        .header-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+        .header-content h1 {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin: 0;
+        }
+        .header-content p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        .header-content a {
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: black;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .header-content a:hover {
+            background-color: white;
+            color: #007BFF;
+        }
+        
+        /* Social Icons Styles */
+        .social-icons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .social-icons i {
+            color: white;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .social-icons i:hover {
+            color: #007BFF;
+        }
+        
+        /* Introduction Section Styles */
+        .introduction {
+            padding: 50px;
+            text-align: center;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: #000;
+            color: #fff;
+            padding: 64px 0;
+            text-align: center;
+        }
+        footer .w3-button {
+            background-color: #fff;
+            color: #000;
+            margin-bottom: 20px;
+        }
+        footer .w3-button:hover {
+            background-color: #f1f1f1;
+        }
+        footer .w3-xlarge i {
+            margin: 0 10px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        footer .w3-xlarge i:hover {
+            color: #007BFF;
+        }
+        
+        /* Responsive Styles for Mobile */
+        @media (max-width: 768px) {
+            .navbar a {
+                display: none;
+            }
+            .navbar .toggle-button {
+                display: block;
+            }
+            .sidebar {
+                display: none;
+            }
+            .sidebar.active {
+                display: flex;
+            }
         }
     </style>
 </head>
 <body>
-
-<!-- Navbar -->
-<div class="w3-top">
-  <div class="w3-bar w3-white w3-card" id="myNavbar">
-    <a href="#home" class="w3-bar-item w3-button w3-wide">GalaxLearn</a>
-    <div class="w3-right w3-hide-small">
-      <a href="login.html" class="w3-bar-item w3-button" id="login">LOGIN</a>
-      <a href="register.html" class="w3-bar-item w3-button" id="register">REGISTER</a>
-      <div id="user-profile" class="user-info" style="display: none;">
-        <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
-        <span class="username" id="username">User Name</span>
-        <a href="#" class="w3-bar-item w3-button" id="logout">LOGOUT</a>
-      </div>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="index.html" class="brand">GalaxLearn</a>
+        <div class="user-info" id="user-profile" style="display: none;">
+            <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
+            <span class="username" id="username">User Name</span>
+            <a href="#" id="logout">LOGOUT</a>
+        </div>
+        <div id="auth-links">
+            <a href="login.html" id="login">LOGIN</a>
+            <a href="register.html" id="register">REGISTER</a>
+        </div>
+        <span class="toggle-button" onclick="toggleSidebar()">&#9776;</span>
     </div>
-    <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
-      <i class="fa fa-bars"></i>
-    </a>
-  </div>
-</div>
-
-<!-- Sidebar -->
-<nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
-  <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-  <a href="login.html" onclick="w3_close()" class="w3-bar-item w3-button" id="login-sidebar">LOGIN</a>
-  <a href="register.html" onclick="w3_close()" class="w3-bar-item w3-button" id="register-sidebar">REGISTER</a>
-  <div id="user-profile-sidebar" class="user-info w3-bar-item w3-button" style="display: none;">
-    <img src="images/avatar.png" alt="Avatar" class="profile-avatar">
-    <span class="username" id="username-sidebar">User Name</span>
-    <a href="#" class="w3-bar-item w3-button" id="logout-sidebar">LOGOUT</a>
-  </div>
-</nav>
-
-<!-- Header -->
-<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
-  <div class="w3-display-left w3-text-white" style="padding:48px">
-    <span class="w3-jumbo w3-hide-small">Welcome to GalaxLearn</span><br>
-    <span class="w3-xxlarge w3-hide-large w3-hide-medium">Welcome to GalaxLearn</span><br>
-    <span class="w3-large">Start your learning journey with us today.</span>
-    <p><a href="#introduction" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Learn more</a></p>
-  </div> 
-  <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  </div>
-</header>
-
-<!-- Introduction Section -->
-<div class="introduction" id="introduction">
-  <h2>Welcome to GalaxLearn</h2>
-  <p>GalaxLearn is your gateway to a world of knowledge and learning. Whether you're here to advance your career, explore new hobbies, or gain new skills, we provide a platform to support your educational journey.</p>
-  <p>Join us today and start your adventure into the world of knowledge.</p>
-</div>
-
-<!-- Footer -->
-<footer class="w3-center w3-black w3-padding-64">
-  <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
-  <div class="w3-xlarge w3-section">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  </div>
-  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
-</footer>
-
-<script>
-// Toggle between showing and hiding the sidebar when clicking the menu icon
-var mySidebar = document.getElementById("mySidebar");
-
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-  } else {
-    mySidebar.style.display = 'block';
-  }
-}
-
-// Close the sidebar with the close button
-function w3_close() {
-    mySidebar.style.display = "none";
-}
-
-// Check if the user is logged in
-function checkLoginStatus() {
-    const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
-
-    if (user) {
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('register').style.display = 'none';
-        document.getElementById('user-profile').style.display = 'flex';
-        document.getElementById('username').innerText = user.name;
-
-        // Also update the sidebar
-        document.getElementById('login-sidebar').style.display = 'none';
-        document.getElementById('register-sidebar').style.display = 'none';
-        document.getElementById('user-profile-sidebar').style.display = 'flex';
-        document.getElementById('username-sidebar').innerText = user.name;
-
-        // Update the avatar if the user has a custom avatar URL
-        if (user.avatar) {
-            document.getElementById('userAvatar').src = user.avatar;
+    
+    <!-- Sidebar for Mobile -->
+    <div class="sidebar" id="sidebar">
+        <a href="login.html" id="login-sidebar">LOGIN</a>
+        <a href="register.html" id="register-sidebar">REGISTER</a>
+        <div class="user-info" id="user-profile-sidebar" style="display: none;">
+            <img src="images/avatar.png" alt="Avatar" class="profile-avatar">
+            <span class="username" id="username-sidebar">User Name</span>
+            <a href="#" id="logout-sidebar">LOGOUT</a>
+        </div>
+    </div>
+    
+    <!-- Header with full-height image -->
+    <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+        <div class="header-content">
+            <h1>Welcome to GalaxLearn</h1>
+            <p>Start your learning journey with us today.</p>
+            <a href="#introduction">Learn more</a>
+        </div>
+        <div class="social-icons">
+            <i class="fa fa-facebook-official w3-hover-opacity"></i>
+            <i class="fa fa-instagram w3-hover-opacity"></i>
+            <i class="fa fa-snapchat w3-hover-opacity"></i>
+            <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+            <i class="fa fa-twitter w3-hover-opacity"></i>
+            <i class="fa fa-linkedin w3-hover-opacity"></i>
+        </div>
+    </header>
+    
+    <!-- Introduction Section -->
+    <div class="introduction" id="introduction">
+        <h2>Welcome to GalaxLearn</h2>
+        <p>GalaxLearn is your gateway to a world of knowledge and learning. Whether you're here to advance your career, explore new hobbies, or gain new skills, we provide a platform to support your educational journey.</p>
+        <p>Join us today and start your adventure into the world of knowledge.</p>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="w3-center w3-black w3-padding-64">
+        <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+        <div class="w3-xlarge w3-section">
+            <i class="fa fa-facebook-official w3-hover-opacity"></i>
+            <i class="fa fa-instagram w3-hover-opacity"></i>
+            <i class="fa fa-snapchat w3-hover-opacity"></i>
+            <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+            <i class="fa fa-twitter w3-hover-opacity"></i>
+            <i class="fa fa-linkedin w3-hover-opacity"></i>
+        </div>
+        <p>&copy; <span id="currentYear"></span> GalaxLearn. All rights reserved.</p>
+        <p>Powered by <a href="https://www.galaxlearn.com" title="GalaxLearn" target="_blank" class="w3-hover-text-green">GalaxLearn</a></p>
+    </footer>
+    
+    <script>
+        // Script to set the current year in the footer
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+        
+        // Toggle the sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
         }
-
-        // Add click event to redirect to profile management
-        document.getElementById('username').addEventListener('click', function () {
-            window.location.href = 'profile.html';
-        });
-        document.getElementById('username-sidebar').addEventListener('click', function () {
-            window.location.href = 'profile.html';
-        });
-    }
-}
-
-// Handle logout
-function handleLogout() {
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('user');
-    location.reload();
-}
-
-// Add event listeners
-document.getElementById('logout').addEventListener('click', handleLogout);
-document.getElementById('logout-sidebar').addEventListener('click', handleLogout);
-
-// Check login status on page load
-checkLoginStatus();
-</script>
-
+        
+        // Check if the user is logged in
+        function checkLoginStatus() {
+            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+        
+            if (user) {
+                document.getElementById('auth-links').style.display = 'none';
+                document.getElementById('user-profile').style.display = 'flex';
+                document.getElementById('username').innerText = user.name;
+        
+                // Also update the sidebar
+                document.getElementById('login-sidebar').style.display = 'none';
+                document.getElementById('register-sidebar').style.display = 'none';
+                document.getElementById('user-profile-sidebar').style.display = 'flex';
+                document.getElementById('username-sidebar').innerText = user.name;
+        
+                // Update the avatar if the user has a custom avatar URL
+                if (user.avatar) {
+                    document.getElementById('userAvatar').src = user.avatar;
+                }
+        
+                // Add click event to redirect to profile management
+                document.getElementById('username').addEventListener('click', function () {
+                    window.location.href = 'profile.html';
+                });
+                document.getElementById('username-sidebar').addEventListener('click', function () {
+                    window.location.href = 'profile.html';
+                });
+            }
+        }
+        
+        // Handle logout
+        function handleLogout() {
+            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
+            location.reload();
+        }
+        
+        // Add event listeners
+        document.getElementById('logout').addEventListener('click', handleLogout);
+        document.getElementById('logout-sidebar').addEventListener('click', handleLogout);
+        
+        // Check login status on page load
+        checkLoginStatus();
+    </script>
 </body>
 </html>

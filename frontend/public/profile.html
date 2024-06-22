@@ -4,142 +4,383 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile - GalaxLearn</title>
-    <link rel="stylesheet" href="css/profile.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
             font-family: "Raleway", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('images/galxlearn2.webp'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* This will keep the background fixed while scrolling */
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px 16px;
+            display: inline-block;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #007BFF;
+        }
+
+        .navbar .brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .user-info .profile-avatar {
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar .user-info .username {
+            margin-right: 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .navbar .toggle-button {
+            display: none;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        .sidebar {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+        }
+
+        .sidebar a {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Mobile view */
+        @media (max-width: 768px) {
+            .navbar a {
+                display: none;
+            }
+            .navbar .toggle-button {
+                display: block;
+            }
+            .sidebar {
+                display: none;
+            }
+            .sidebar.active {
+                display: flex;
+            }
+        }
+
+        .profile-container {
+            max-width: 600px;
+            margin: 80px auto 40px auto; /* Adjusted margin for fixed navbar */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .profile-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-group .avatar-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .avatar-option {
+            border: 2px solid transparent;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+        }
+
+        .avatar-option.selected {
+            border-color: #007BFF;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
         }
     </style>
 </head>
 <body>
-    <div class="profile-container">
-        <h2>User Profile</h2>
-        <form id="profileForm">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" disabled>
-            </div>
-            <div class="form-group">
-                <label for="city">City:</label>
-                <input type="text" id="city" name="city">
-            </div>
-            <div class="form-group">
-                <label for="country">Country:</label>
-                <input type="text" id="country" name="country">
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" name="phone">
-            </div>
-            <div class="form-group">
-                <label for="avatar">Avatar:</label>
-                <div class="avatar-selection">
-                    <!-- Avatar images will be dynamically inserted here -->
-                </div>
-                <input type="hidden" id="avatar" name="avatar">
-            </div>
-            <button type="submit">Save Changes</button>
-        </form>
-        <p id="message" style="display:none;"></p>
+
+<!-- Custom Navbar -->
+<div class="navbar">
+    <a href="index.html" class="brand">GalaxLearn</a>
+    <div class="user-info" style="display: none;" id="user-profile">
+        <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
+        <span class="username" id="username">User Name</span>
+        <a href="#" id="logout">LOGOUT</a>
     </div>
+    <div id="auth-links">
+        <a href="login.html" id="login">LOGIN</a>
+        <a href="register.html" id="register">REGISTER</a>
+    </div>
+    <span class="toggle-button" onclick="toggleSidebar()">&#9776;</span>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+<!-- Sidebar for Mobile -->
+<div class="sidebar" id="sidebar">
+    <a href="login.html" id="login-sidebar">LOGIN</a>
+    <a href="register.html" id="register-sidebar">REGISTER</a>
+    <div class="user-info" id="user-profile-sidebar" style="display: none;">
+        <img src="images/avatar.png" alt="Avatar" class="profile-avatar">
+        <span class="username" id="username-sidebar">User Name</span>
+        <a href="#" id="logout-sidebar">LOGOUT</a>
+    </div>
+</div>
 
-            if (!user) {
-                alert('User not logged in!');
-                window.location.href = 'login.html';
-                return;
-            }
+<div class="profile-container">
+    <h2>User Profile</h2>
+    <form id="profileForm">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" disabled>
+        </div>
+        <div class="form-group">
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city">
+        </div>
+        <div class="form-group">
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+            <label for="avatar">Avatar:</label>
+            <div class="avatar-selection">
+                <!-- Avatar images will be dynamically inserted here -->
+            </div>
+            <input type="hidden" id="avatar" name="avatar">
+        </div>
+        <button type="submit">Save Changes</button>
+    </form>
+    <p id="message" style="display:none;"></p>
+</div>
 
-            // Populate form with user data
-            document.getElementById('name').value = user.name;
-            document.getElementById('email').value = user.email;
-            document.getElementById('city').value = user.city || '';
-            document.getElementById('country').value = user.country || '';
-            document.getElementById('phone').value = user.phone || '';
-            document.getElementById('avatar').value = user.avatar || '';
+<script>
+    // Toggle the sidebar
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('active');
+    }
 
-            // Load avatars dynamically
-            const avatarSelection = document.querySelector('.avatar-selection');
-            const avatarDir = 'images/avatars';
-            const avatars = ['boy.png', 'dog.png', 'gamer.png', 'girl.png', 'man (1).png', 'man.png', 'woman (1).png', 'woman (2).png', 'woman.png']; // List your avatar filenames here
+    // Check if the user is logged in
+    function checkLoginStatus() {
+        const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
 
-            avatars.forEach(avatar => {
-                const img = document.createElement('img');
-                img.src = `${avatarDir}/${avatar}`;
-                img.classList.add('avatar-option');
-                img.addEventListener('click', function () {
-                    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
-                    img.classList.add('selected');
-                    document.getElementById('avatar').value = img.src;
-                });
-                avatarSelection.appendChild(img);
-            });
+        if (user) {
+            document.getElementById('auth-links').style.display = 'none';
+            document.getElementById('user-profile').style.display = 'flex';
+            document.getElementById('username').innerText = user.name;
 
-            // Highlight the current avatar
+            // Also update the sidebar
+            document.getElementById('login-sidebar').style.display = 'none';
+            document.getElementById('register-sidebar').style.display = 'none';
+            document.getElementById('user-profile-sidebar').style.display = 'flex';
+            document.getElementById('username-sidebar').innerText = user.name;
+
+            // Update the avatar if the user has a custom avatar URL
             if (user.avatar) {
-                const currentAvatar = document.querySelector(`img[src='${user.avatar}']`);
-                if (currentAvatar) {
-                    currentAvatar.classList.add('selected');
-                }
+                document.getElementById('userAvatar').src = user.avatar;
             }
 
-            // Handle form submission
-            document.getElementById('profileForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const updatedUser = {
-                    name: document.getElementById('name').value,
-                    email: user.email,
-                    city: document.getElementById('city').value,
-                    country: document.getElementById('country').value,
-                    phone: document.getElementById('phone').value,
-                    avatar: document.getElementById('avatar').value
-                };
-
-                fetch(`http://localhost:5000/api/user/${user.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}` // Include token if you're using JWT
-                    },
-                    body: JSON.stringify(updatedUser)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    if (result.success) {
-                        // Update local storage/session storage with new user info
-                        if (localStorage.getItem('user')) {
-                            localStorage.setItem('user', JSON.stringify(result.user));
-                        } else {
-                            sessionStorage.setItem('user', JSON.stringify(result.user));
-                        }
-                        document.getElementById('message').innerText = 'Profile updated successfully.';
-                    } else {
-                        document.getElementById('message').innerText = result.message;
-                    }
-                    document.getElementById('message').style.display = 'block';
-                })
-                .catch(error => {
-                    document.getElementById('message').innerText = 'An error occurred while updating the profile.';
-                    document.getElementById('message').style.display = 'block';
-                    console.error('Error updating profile:', error);
-                });
+            // Add click event to redirect to profile management
+            document.getElementById('username').addEventListener('click', function () {
+                window.location.href = 'profile.html';
             });
+            document.getElementById('username-sidebar').addEventListener('click', function () {
+                window.location.href = 'profile.html';
+            });
+        }
+    }
+
+    // Handle logout
+    function handleLogout() {
+        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
+        location.reload();
+    }
+
+    // Add event listeners
+    document.getElementById('logout').addEventListener('click', handleLogout);
+    document.getElementById('logout-sidebar').addEventListener('click', handleLogout);
+
+    // Check login status on page load
+    checkLoginStatus();
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+
+        if (!user) {
+            alert('User not logged in!');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Populate form with user data
+        document.getElementById('name').value = user.name;
+        document.getElementById('email').value = user.email;
+        document.getElementById('city').value = user.city || '';
+        document.getElementById('country').value = user.country || '';
+        document.getElementById('phone').value = user.phone || '';
+        document.getElementById('avatar').value = user.avatar || '';
+
+        // Load avatars dynamically
+        const avatarSelection = document.querySelector('.avatar-selection');
+        const avatarDir = 'images/avatars';
+        const avatars = ['boy.png', 'dog.png', 'gamer.png', 'girl.png', 'man (1).png', 'man.png', 'woman (1).png', 'woman (2).png', 'woman.png']; // List your avatar filenames here
+
+        avatars.forEach(avatar => {
+            const img = document.createElement('img');
+            img.src = `${avatarDir}/${avatar}`;
+            img.classList.add('avatar-option');
+            img.addEventListener('click', function () {
+                document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+                img.classList.add('selected');
+                document.getElementById('avatar').value = img.src;
+            });
+            avatarSelection.appendChild(img);
         });
-    </script>
+
+        // Highlight the current avatar
+        if (user.avatar) {
+            const currentAvatar = document.querySelector(`img[src='${user.avatar}']`);
+            if (currentAvatar) {
+                currentAvatar.classList.add('selected');
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('profileForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const updatedUser = {
+                name: document.getElementById('name').value,
+                email: user.email,
+                city: document.getElementById('city').value,
+                country: document.getElementById('country').value,
+                phone: document.getElementById('phone').value,
+                avatar: document.getElementById('avatar').value
+            };
+
+            fetch(`http://localhost:5000/api/user/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}` // Include token if you're using JWT
+                },
+                body: JSON.stringify(updatedUser)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.success) {
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    sessionStorage.setItem('user', JSON.stringify(result.user));
+                    document.getElementById('message').innerText = 'Profile updated successfully.';
+                } else {
+                    document.getElementById('message').innerText = result.message;
+                }
+                document.getElementById('message').style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('message').innerText = 'An error occurred while updating the profile.';
+                document.getElementById('message').style.display = 'block';
+                console.error('Error updating profile:', error);
+            });
+            
+        });
+    });
+</script>
+
 </body>
 </html>

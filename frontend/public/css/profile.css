@@ -1,19 +1,70 @@
+/* General Styling */
 body, h1, h2, h3, h4, h5, h6 {
     font-family: "Raleway", sans-serif;
 }
 
-.profile-container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #f9f9f9;
+body, html {
+    height: 100%;
+    line-height: 1.8;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
 }
 
-h2 {
+/* Navbar Styling */
+.w3-top {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+
+.w3-bar .w3-button {
+    padding: 16px;
+}
+
+.profile-avatar {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    margin-left: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Sidebar Styling */
+#mySidebar .user-info {
+    display: flex;
+    align-items: center;
+}
+
+#mySidebar .profile-avatar {
+    margin-right: 10px;
+}
+
+/* Profile Container Styling */
+.profile-container {
+    margin: 100px auto 50px;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.profile-container h2 {
     text-align: center;
     margin-bottom: 20px;
+    color: #333;
 }
 
 .form-group {
@@ -22,52 +73,80 @@ h2 {
 
 .form-group label {
     display: block;
+    margin-bottom: 5px;
     font-weight: bold;
+    color: #333;
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
+    background-color: #f9f9f9;
+    font-size: 14px;
 }
 
-.avatar-selection {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.avatar-option {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid transparent;
-}
-
-.avatar-option.selected {
-    border-color: #4caf50;
-}
-
-button {
+button[type="submit"] {
     width: 100%;
-    padding: 10px;
-    background-color: #4caf50;
+    padding: 12px;
+    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 18px;
     cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
 }
 
-button:hover {
+button[type="submit"]:hover {
     background-color: #45a049;
 }
 
 #message {
     text-align: center;
     margin-top: 20px;
-    font-size: 16px;
+    font-size: 14px;
+    color: #d9534f;
+}
+
+/* Avatar Selection Styling */
+.avatar-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.avatar-option {
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    transition: border 0.3s ease;
+}
+
+.avatar-option:hover,
+.avatar-option.selected {
+    border-color: #4CAF50;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 600px) {
+    .profile-container {
+        padding: 15px;
+    }
+
+    .form-group label, .form-group input, .form-group select, button[type="submit"] {
+        font-size: 12px;
+    }
+
+    .avatar-option {
+        width: 40px;
+        height: 40px;
+    }
 }
