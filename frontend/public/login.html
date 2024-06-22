@@ -47,7 +47,7 @@
                 password: form.password.value,
             };
 
-            fetch('http://localhost:5000/api/auth/login', { // Update to correct backend URL
+            fetch('http://localhost:5000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,12 +62,20 @@
             })
             .then(result => {
                 if (result.success) {
-                    // Store user info in localStorage if 'Remember Me' is checked
-                    if (form.rememberMe.checked) {
-                        localStorage.setItem('user', JSON.stringify(result.user));
-                    } else {
-                        sessionStorage.setItem('user', JSON.stringify(result.user));
-                    }
+                    // Store user info and token in localStorage if 'Remember Me' is checked
+                    const storage = form.rememberMe.checked ? localStorage : sessionStorage;
+                    storage.setItem('user', JSON.stringify({
+                        id: result.user.id,
+                        name: result.user.name,
+                        email: result.user.email,
+                        role: result.user.role,
+                        city: result.user.city,
+                        country: result.user.country,
+                        phone: result.user.phone,
+                        avatar: result.user.avatar,
+                        token: result.token
+                    }));
+
                     // Redirect to the homepage or a user-specific page
                     window.location.href = 'index.html';
                 } else {

@@ -10,77 +10,6 @@
     <style>
         body {
             font-family: "Raleway", sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        .profile-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .profile-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .avatar-selection {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-        .avatar-option {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border 0.3s;
-        }
-        .avatar-option.selected {
-            border: 2px solid #007BFF;
-        }
-        button[type="submit"] {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        #message {
-            text-align: center;
-            margin-top: 20px;
-        }
-        #message.success {
-            color: green;
-        }
-        #message.error {
-            color: red;
         }
     </style>
 </head>
@@ -123,13 +52,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
-        
+
             if (!user) {
                 alert('User not logged in!');
                 window.location.href = 'login.html';
                 return;
             }
-        
+
             // Populate form with user data
             document.getElementById('name').value = user.name;
             document.getElementById('email').value = user.email;
@@ -137,12 +66,12 @@
             document.getElementById('country').value = user.country || '';
             document.getElementById('phone').value = user.phone || '';
             document.getElementById('avatar').value = user.avatar || '';
-        
+
             // Load avatars dynamically
             const avatarSelection = document.querySelector('.avatar-selection');
             const avatarDir = 'images/avatars';
-            const avatars = ['boy.png', 'dog.png', 'gamer.png', 'girl.png', 'man (1).png', 'man.png', 'woman (1).png', 'woman (2).png', 'woman.png'];
-        
+            const avatars = ['boy.png', 'dog.png', 'gamer.png', 'girl.png', 'man (1).png', 'man.png', 'woman (1).png', 'woman (2).png', 'woman.png']; // List your avatar filenames here
+
             avatars.forEach(avatar => {
                 const img = document.createElement('img');
                 img.src = `${avatarDir}/${avatar}`;
@@ -154,7 +83,7 @@
                 });
                 avatarSelection.appendChild(img);
             });
-        
+
             // Highlight the current avatar
             if (user.avatar) {
                 const currentAvatar = document.querySelector(`img[src='${user.avatar}']`);
@@ -162,11 +91,11 @@
                     currentAvatar.classList.add('selected');
                 }
             }
-        
+
             // Handle form submission
             document.getElementById('profileForm').addEventListener('submit', function (e) {
                 e.preventDefault();
-        
+
                 const updatedUser = {
                     name: document.getElementById('name').value,
                     email: user.email,
@@ -175,12 +104,12 @@
                     phone: document.getElementById('phone').value,
                     avatar: document.getElementById('avatar').value
                 };
-        
+
                 fetch(`http://localhost:5000/api/user/${user.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
+                        'Authorization': `Bearer ${user.token}` // Include token if you're using JWT
                     },
                     body: JSON.stringify(updatedUser)
                 })
@@ -191,31 +120,26 @@
                     return response.json();
                 })
                 .then(result => {
-                    const messageElement = document.getElementById('message');
                     if (result.success) {
-                        localStorage.setItem('user', JSON.stringify(result.user));
-                        sessionStorage.setItem('user', JSON.stringify(result.user));
-                        messageElement.innerText = 'Profile updated successfully.';
-                        messageElement.classList.add('success');
-                        messageElement.classList.remove('error');
+                        // Update local storage/session storage with new user info
+                        if (localStorage.getItem('user')) {
+                            localStorage.setItem('user', JSON.stringify(result.user));
+                        } else {
+                            sessionStorage.setItem('user', JSON.stringify(result.user));
+                        }
+                        document.getElementById('message').innerText = 'Profile updated successfully.';
                     } else {
-                        messageElement.innerText = result.message;
-                        messageElement.classList.add('error');
-                        messageElement.classList.remove('success');
+                        document.getElementById('message').innerText = result.message;
                     }
-                    messageElement.style.display = 'block';
+                    document.getElementById('message').style.display = 'block';
                 })
                 .catch(error => {
-                    const messageElement = document.getElementById('message');
-                    messageElement.innerText = 'An error occurred while updating the profile.';
-                    messageElement.classList.add('error');
-                    messageElement.classList.remove('success');
-                    messageElement.style.display = 'block';
+                    document.getElementById('message').innerText = 'An error occurred while updating the profile.';
+                    document.getElementById('message').style.display = 'block';
                     console.error('Error updating profile:', error);
                 });
             });
         });
-        
     </script>
 </body>
 </html>
