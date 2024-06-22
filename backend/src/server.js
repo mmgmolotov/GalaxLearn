@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path'); // Add this line to handle static file serving
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes'); // Add this line to import userRoutes
 
@@ -19,9 +20,17 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
+// Serve static files
+app.use(express.static(path.join(__dirname, '../public'))); // Adjust the path as needed to point to your public directory
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes); // Register userRoutes under '/api'
+
+// Catch-all route to serve the lobby page
+app.get('/lobby', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/lobby.html'));
+});
 
 // Database Connection
 const connectDB = async () => {

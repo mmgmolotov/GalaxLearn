@@ -88,6 +88,7 @@
             bottom: 0;
             left: 0;
             padding-top: 20px;
+            z-index: 999;
         }
 
         .sidebar a {
@@ -108,7 +109,7 @@
 
         .content {
             margin-left: 220px; /* Adjusted for sidebar width */
-            padding: 20px;
+            padding: 80px 20px 20px 20px; /* Added top padding for navbar */
             transition: margin-left 0.3s;
         }
 
@@ -132,11 +133,20 @@
             height: 100px;
             width: 100px;
             margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for avatar */
         }
 
         .profile-details .profile-info {
-            font-size: 1.1em;
+            font-size: 1.2em;
             margin: 10px 0;
+            color: #333;
+        }
+
+        .profile-details .profile-info span {
+            display: block;
+            font-size: 1em;
+            color: #777;
         }
 
         .profile-details .update-button {
@@ -179,13 +189,14 @@
 
     <!-- Main Content -->
     <div class="content">
-        <h1>Welcome to the Lobby</h1>
-        <p>Select an option from the menu to view more details.</p>
+        <h1 id="mainTitle">Welcome to the Lobby</h1>
+        <p id="mainDescription">Select an option from the menu to view more details.</p>
 
         <!-- Profile Details Section -->
         <div id="profile-details" class="profile-details">
             <img id="profile-avatar" src="images/avatar.png" alt="Profile Avatar">
             <div class="profile-info" id="profile-name">Name: User Name</div>
+            <div class="profile-info" id="profile-role">Role: Student/Teacher</div>
             <div class="profile-info" id="profile-email">Email: user@example.com</div>
             <div class="profile-info" id="profile-city">City: Unknown</div>
             <div class="profile-info" id="profile-country">Country: Unknown</div>
@@ -202,9 +213,15 @@
                 section.classList.remove('active');
             });
 
-            // Show the selected section
+            // Reset main title and description visibility
+            document.getElementById('mainTitle').style.display = 'block';
+            document.getElementById('mainDescription').style.display = 'block';
+
+            // Show the selected section and hide main title/description if needed
             if (contentId === 'profile') {
                 document.getElementById('profile-details').classList.add('active');
+                document.getElementById('mainTitle').style.display = 'none';
+                document.getElementById('mainDescription').style.display = 'none';
                 loadProfileDetails();
             }
         }
@@ -216,6 +233,7 @@
             if (user) {
                 document.getElementById('profile-avatar').src = user.avatar || 'images/avatar.png';
                 document.getElementById('profile-name').innerText = `Name: ${user.name}`;
+                document.getElementById('profile-role').innerText = `Role: ${user.role.charAt(0).toUpperCase() + user.role.slice(1)}`;
                 document.getElementById('profile-email').innerText = `Email: ${user.email}`;
                 document.getElementById('profile-city').innerText = `City: ${user.city || 'Unknown'}`;
                 document.getElementById('profile-country').innerText = `Country: ${user.country || 'Unknown'}`;
