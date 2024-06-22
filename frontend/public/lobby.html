@@ -4,18 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby - GalaxLearn</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/lobby.css"> <!-- Link to the isolated lobby.css -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet"> <!-- Include the serious font -->
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to the Lobby</h1>
-        <p>Select an option to continue:</p>
-        <ul>
-            <li><a href="/courses.html">View Courses</a></li>
-            <li><a href="/profile.html">View Profile</a></li>
-            <li><a href="/settings.html">Settings</a></li>
-        </ul>
-        <p><a href="/login.html" onclick="logout()">Logout</a></p>
+        <div class="lobby-content">
+            <h1>Welcome to the Lobby</h1>
+            <p>Select an option to continue:</p>
+            <ul class="lobby-options">
+                <li><a href="/courses.html">View Courses</a></li>
+                <li><a href="/profile.html">View Profile</a></li>
+                <li><a href="/settings.html">Settings</a></li>
+                <li><a href="/support.html">Support</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li><a href="/community.html">Community</a></li>
+            </ul>
+            <p><a href="/login.html" onclick="logout()">Logout</a></p>
+        </div>
     </div>
 
     <script>

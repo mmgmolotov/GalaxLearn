@@ -19,7 +19,7 @@
         .bgimg-1 {
             background-position: center;
             background-size: cover;
-            background-image: url('images/bg3.webp'); /* Update with your new image path */
+            background-image: url('images/glaxlearn1.webp');
             min-height: 100%;
         }
 
@@ -42,16 +42,15 @@
             font-size: 1.2em;
         }
 
-        /* Centering the buttons */
         .actions {
             display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            height: 100%; /* Full height for vertical centering */
+            justify-content: center;
+            align-items: center;
+            height: 100%;
         }
 
         .inputBx {
-            margin: 0 10px; /* Space between buttons */
+            margin: 0 10px;
         }
 
         .btn {
@@ -59,34 +58,61 @@
             font-size: 16px;
             cursor: pointer;
         }
+
+        .profile-avatar {
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .username {
+            margin-left: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<!-- Navbar (sit on top) -->
+<!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-white w3-card" id="myNavbar">
     <a href="#home" class="w3-bar-item w3-button w3-wide">GalaxLearn</a>
-    <!-- Right-sided navbar links -->
     <div class="w3-right w3-hide-small">
-      <a href="login.html" class="w3-bar-item w3-button">LOGIN</a>
-      <a href="register.html" class="w3-bar-item w3-button">REGISTER</a>
+      <a href="login.html" class="w3-bar-item w3-button" id="login">LOGIN</a>
+      <a href="register.html" class="w3-bar-item w3-button" id="register">REGISTER</a>
+      <div id="user-profile" class="user-info" style="display: none;">
+        <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
+        <span class="username" id="username">User Name</span>
+        <a href="#" class="w3-bar-item w3-button" id="logout">LOGOUT</a>
+      </div>
     </div>
-    <!-- Hide right-floated links on small screens and replace them with a menu icon -->
     <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium" onclick="w3_open()">
       <i class="fa fa-bars"></i>
     </a>
   </div>
 </div>
 
-<!-- Sidebar on small screens when clicking the menu icon -->
+<!-- Sidebar -->
 <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-animate-left w3-hide-medium w3-hide-large" style="display:none" id="mySidebar">
   <a href="javascript:void(0)" onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-padding-16">Close ×</a>
-  <a href="login.html" onclick="w3_close()" class="w3-bar-item w3-button">LOGIN</a>
-  <a href="register.html" onclick="w3_close()" class="w3-bar-item w3-button">REGISTER</a>
+  <a href="login.html" onclick="w3_close()" class="w3-bar-item w3-button" id="login-sidebar">LOGIN</a>
+  <a href="register.html" onclick="w3_close()" class="w3-bar-item w3-button" id="register-sidebar">REGISTER</a>
+  <div id="user-profile-sidebar" class="user-info w3-bar-item w3-button" style="display: none;">
+    <img src="images/avatar.png" alt="Avatar" class="profile-avatar">
+    <span class="username" id="username-sidebar">User Name</span>
+    <a href="#" class="w3-bar-item w3-button" id="logout-sidebar">LOGOUT</a>
+  </div>
 </nav>
 
-<!-- Header with full-height image -->
+<!-- Header -->
 <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
   <div class="w3-display-left w3-text-white" style="padding:48px">
     <span class="w3-jumbo w3-hide-small">Welcome to GalaxLearn</span><br>
@@ -141,6 +167,51 @@ function w3_open() {
 function w3_close() {
     mySidebar.style.display = "none";
 }
+
+// Check if the user is logged in
+function checkLoginStatus() {
+    const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+
+    if (user) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('register').style.display = 'none';
+        document.getElementById('user-profile').style.display = 'flex';
+        document.getElementById('username').innerText = user.name;
+
+        // Also update the sidebar
+        document.getElementById('login-sidebar').style.display = 'none';
+        document.getElementById('register-sidebar').style.display = 'none';
+        document.getElementById('user-profile-sidebar').style.display = 'flex';
+        document.getElementById('username-sidebar').innerText = user.name;
+
+        // Update the avatar if the user has a custom avatar URL
+        if (user.avatar) {
+            document.getElementById('userAvatar').src = user.avatar;
+        }
+
+        // Add click event to redirect to profile management
+        document.getElementById('username').addEventListener('click', function () {
+            window.location.href = 'profile.html';
+        });
+        document.getElementById('username-sidebar').addEventListener('click', function () {
+            window.location.href = 'profile.html';
+        });
+    }
+}
+
+// Handle logout
+function handleLogout() {
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    location.reload();
+}
+
+// Add event listeners
+document.getElementById('logout').addEventListener('click', handleLogout);
+document.getElementById('logout-sidebar').addEventListener('click', handleLogout);
+
+// Check login status on page load
+checkLoginStatus();
 </script>
 
 </body>

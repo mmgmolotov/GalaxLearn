@@ -1,3 +1,4 @@
+// src/models/User.js
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -19,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     enum: ['student', 'teacher'],
     required: true,
   },
+  city: String,
+  country: String,
+  phone: String,
+  avatar: String, // URL to the user's avatar image
 }, {
   timestamps: true,
 });

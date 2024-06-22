@@ -54,10 +54,22 @@
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(result => {
                 if (result.success) {
-                    window.location.href = 'lobby.html'; // Redirect on successful login
+                    // Store user info in localStorage if 'Remember Me' is checked
+                    if (form.rememberMe.checked) {
+                        localStorage.setItem('user', JSON.stringify(result.user));
+                    } else {
+                        sessionStorage.setItem('user', JSON.stringify(result.user));
+                    }
+                    // Redirect to the homepage or a user-specific page
+                    window.location.href = 'index.html';
                 } else {
                     document.getElementById('errorMessage').innerText = result.message;
                     document.getElementById('errorMessage').style.display = 'block';
@@ -68,6 +80,14 @@
                 document.getElementById('errorMessage').style.display = 'block';
                 console.error('Error during login:', error);
             });
+        });
+
+        // Check if the user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('user') || sessionStorage.getItem('user');
+            if (user) {
+                window.location.href = 'index.html';
+            }
         });
     </script>
 </body>

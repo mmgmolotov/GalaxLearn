@@ -1,4 +1,4 @@
-// server.js or index.js
+// src/server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -6,6 +6,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes'); // Ensure userRoutes is imported
 
 dotenv.config();
 
@@ -18,7 +19,8 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // Routes
-app.use('/api/auth', authRoutes); // Register the auth routes with the correct base path
+app.use('/api/auth', authRoutes); // Register the auth routes
+app.use('/api', userRoutes); // Register the user routes
 
 // Database Connection
 const connectDB = async () => {
