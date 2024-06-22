@@ -59,6 +59,27 @@
             margin-right: 20px;
             font-size: 1em;
             cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .navbar .username:hover {
+            color: #007BFF;
+        }
+        .navbar .lobby-btn {
+            margin-right: 10px;
+            padding: 8px 16px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar .lobby-btn:hover {
+            background-color: #218838;
+            color: #fff;
         }
         .navbar .toggle-button {
             display: none;
@@ -193,6 +214,7 @@
         <div class="user-info" id="user-profile" style="display: none;">
             <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
             <span class="username" id="username">User Name</span>
+            <a href="lobby.html" class="lobby-btn">LOBBY</a>
             <a href="#" id="logout">LOGOUT</a>
         </div>
         <div id="auth-links">
@@ -209,6 +231,7 @@
         <div class="user-info" id="user-profile-sidebar" style="display: none;">
             <img src="images/avatar.png" alt="Avatar" class="profile-avatar">
             <span class="username" id="username-sidebar">User Name</span>
+            <a href="lobby.html" class="lobby-btn">LOBBY</a>
             <a href="#" id="logout-sidebar">LOGOUT</a>
         </div>
     </div>
