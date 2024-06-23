@@ -6,9 +6,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const path = require('path'); // Add this line to handle static file serving
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes'); // Add this line to import userRoutes
+const userRoutes = require('./routes/userRoutes');
+const announcementRoutes = require('./routes/announcementRoutes'); // Import announcementRoutes
 
 dotenv.config();
 
@@ -20,17 +20,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '../public'))); // Adjust the path as needed to point to your public directory
-
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api', userRoutes); // Register userRoutes under '/api'
-
-// Catch-all route to serve the lobby page
-app.get('/lobby', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/lobby.html'));
-});
+app.use('/api/auth', authRoutes); // Authentication routes
+app.use('/api', userRoutes);      // User routes
+app.use('/api', announcementRoutes); // Announcement routes
 
 // Database Connection
 const connectDB = async () => {
@@ -47,6 +40,12 @@ const connectDB = async () => {
 };
 
 connectDB();
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: 'Something went wrong!' });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

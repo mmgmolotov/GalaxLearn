@@ -113,11 +113,13 @@
             transition: margin-left 0.3s;
         }
 
-        .profile-details {
+        .profile-details,
+        .announcements-section {
             display: none;
         }
 
-        .profile-details.active {
+        .profile-details.active,
+        .announcements-section.active {
             display: block;
             max-width: 600px;
             margin: 40px auto;
@@ -128,28 +130,21 @@
             text-align: center;
         }
 
-        .profile-details img {
+        .profile-details img,
+        .announcements-section img {
             border-radius: 50%;
             height: 100px;
             width: 100px;
             margin-bottom: 20px;
             object-fit: cover;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for avatar */
         }
 
-        .profile-details .profile-info {
-            font-size: 1.2em;
+        .profile-info {
+            font-size: 1.1em;
             margin: 10px 0;
-            color: #333;
         }
 
-        .profile-details .profile-info span {
-            display: block;
-            font-size: 1em;
-            color: #777;
-        }
-
-        .profile-details .update-button {
+        .update-button {
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #007BFF;
@@ -160,8 +155,86 @@
             transition: background-color 0.3s;
         }
 
-        .profile-details .update-button:hover {
+        .update-button:hover {
             background-color: #0056b3;
+        }
+
+        .announcement-form {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .announcement-form h2 {
+            margin-bottom: 20px;
+        }
+
+        .announcement-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        .announcement-form .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .announcement-form .form-group input[type="text"],
+        .announcement-form .form-group textarea,
+        .announcement-form .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .announcement-form .form-group textarea {
+            resize: vertical;
+        }
+
+        .announcement-form button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .announcement-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .announcement-list {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .announcement-item {
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .announcement-item h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .announcement-item p {
+            margin: 10px 0;
+        }
+
+        .announcement-item .announcement-author {
+            color: #666;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -189,8 +262,8 @@
 
     <!-- Main Content -->
     <div class="content">
-        <h1 id="mainTitle">Welcome to the Lobby</h1>
-        <p id="mainDescription">Select an option from the menu to view more details.</p>
+        <h1 id="main-title">Welcome to the Lobby</h1>
+        <p id="main-description">Select an option from the menu to view more details.</p>
 
         <!-- Profile Details Section -->
         <div id="profile-details" class="profile-details">
@@ -203,26 +276,58 @@
             <div class="profile-info" id="profile-phone">Phone: Unknown</div>
             <a href="profile.html" class="update-button">Update Profile</a>
         </div>
+
+        <!-- Announcements Section -->
+        <div id="announcements" class="announcements-section">
+            <div id="announcement-list" class="announcement-list">
+                <!-- Announcements will be loaded here -->
+            </div>
+            <div class="announcement-form">
+                <h2>Create Announcement</h2>
+                <form id="announcementForm">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content:</label>
+                        <textarea id="content" name="content" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="topic">Select Topic:</label>
+                        <select id="topic" name="topic" required>
+                            <!-- Topics will be dynamically loaded here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="customTopic">Or Add Custom Topic:</label>
+                        <input type="text" id="customTopic" name="customTopic">
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script>
         // Function to show content based on the sidebar selection
         function showContent(contentId) {
             // Hide all sections
-            document.querySelectorAll('.profile-details').forEach(section => {
+            document.querySelectorAll('.profile-details, .announcements-section').forEach(section => {
                 section.classList.remove('active');
             });
 
-            // Reset main title and description visibility
-            document.getElementById('mainTitle').style.display = 'block';
-            document.getElementById('mainDescription').style.display = 'block';
-
-            // Show the selected section and hide main title/description if needed
+            // Show the selected section
             if (contentId === 'profile') {
                 document.getElementById('profile-details').classList.add('active');
-                document.getElementById('mainTitle').style.display = 'none';
-                document.getElementById('mainDescription').style.display = 'none';
                 loadProfileDetails();
+                document.getElementById('main-title').style.display = 'none';
+                document.getElementById('main-description').style.display = 'none';
+            } else if (contentId === 'announcements') {
+                document.getElementById('announcements').classList.add('active');
+                loadAnnouncements();
+                document.getElementById('main-title').style.display = 'none';
+                document.getElementById('main-description').style.display = 'none';
             }
         }
 
@@ -233,7 +338,7 @@
             if (user) {
                 document.getElementById('profile-avatar').src = user.avatar || 'images/avatar.png';
                 document.getElementById('profile-name').innerText = `Name: ${user.name}`;
-                document.getElementById('profile-role').innerText = `Role: ${user.role.charAt(0).toUpperCase() + user.role.slice(1)}`;
+                document.getElementById('profile-role').innerText = `Role: ${user.role === 'teacher' ? 'Teacher' : 'Student'}`;
                 document.getElementById('profile-email').innerText = `Email: ${user.email}`;
                 document.getElementById('profile-city').innerText = `City: ${user.city || 'Unknown'}`;
                 document.getElementById('profile-country').innerText = `Country: ${user.country || 'Unknown'}`;
@@ -243,6 +348,66 @@
                 window.location.href = 'login.html';
             }
         }
+
+        // Load announcements from the server
+        async function loadAnnouncements() {
+            try {
+                const response = await fetch('http://localhost:5000/api/announcements');
+                const data = await response.json();
+
+                if (data.success) {
+                    const announcementList = document.getElementById('announcement-list');
+                    announcementList.innerHTML = ''; // Clear existing announcements
+
+                    data.announcements.forEach(announcement => {
+                        const item = document.createElement('div');
+                        item.classList.add('announcement-item');
+                        item.innerHTML = `
+                            <h3>${announcement.title}</h3>
+                            <p>${announcement.content}</p>
+                            <p class="announcement-author">Posted by: ${announcement.author.name}</p>
+                        `;
+                        announcementList.appendChild(item);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading announcements:', error);
+            }
+        }
+
+        // Handle announcement form submission
+        document.getElementById('announcementForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const topicId = document.getElementById('topic').value;
+            const customTopic = document.getElementById('customTopic').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/announcements', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ title, content, topicId, customTopic })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Announcement created successfully!');
+                    loadAnnouncements(); // Reload announcements
+                } else {
+                    alert('Failed to create announcement: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error creating announcement:', error);
+                alert('Error creating announcement');
+            }
+        });
 
         // Function to handle logout
         function handleLogout() {
@@ -255,13 +420,31 @@
         document.getElementById('logout').addEventListener('click', handleLogout);
 
         // Check login status on page load and show user info if logged in
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
 
             if (user) {
                 document.getElementById('user-profile').style.display = 'flex';
                 document.getElementById('username').innerText = user.name;
                 document.getElementById('userAvatar').src = user.avatar || 'images/avatar.png';
+
+                // Load topics for the announcement form
+                try {
+                    const response = await fetch('http://localhost:5000/api/topics');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const topicSelect = document.getElementById('topic');
+                        data.topics.forEach(topic => {
+                            const option = document.createElement('option');
+                            option.value = topic._id;
+                            option.text = topic.name;
+                            topicSelect.appendChild(option);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading topics:', error);
+                }
             } else {
                 window.location.href = 'login.html';
             }

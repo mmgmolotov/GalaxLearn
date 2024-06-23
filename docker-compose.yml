@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: galaxlearn-mongo
+    ports:
+      - "27017:27017" # Expose MongoDB's default port
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - galaxlearn-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.backend
+    container_name: galaxlearn-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    networks:
+      - galaxlearn-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.frontend
+    container_name: galaxlearn-frontend
+    ports:
+      - "3000:3000" 
+    volumes:
+      - ./frontend:/app 
+    depends_on:
+      - backend 
+    networks:
+      - galaxlearn-network
+
+networks:
+  galaxlearn-network:
+    driver: bridge
+
+volumes:
+  mongodata:
