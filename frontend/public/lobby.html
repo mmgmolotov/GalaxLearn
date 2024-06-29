@@ -236,6 +236,44 @@
             color: #666;
             font-size: 0.9em;
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -279,10 +317,17 @@
 
         <!-- Announcements Section -->
         <div id="announcements" class="announcements-section">
+            <input type="text" id="announcement-search" placeholder="Search announcements...">
             <div id="announcement-list" class="announcement-list">
                 <!-- Announcements will be loaded here -->
             </div>
-            <div class="announcement-form">
+            <button id="post-announcement-btn" class="update-button">Post Announcement</button>
+        </div>
+
+        <!-- Announcement Modal -->
+        <div id="announcementModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
                 <h2>Create Announcement</h2>
                 <form id="announcementForm">
                     <div class="form-group">
@@ -349,31 +394,33 @@
             }
         }
 
-        // Load announcements from the server
-        async function loadAnnouncements() {
-            try {
-                const response = await fetch('http://localhost:5000/api/announcements');
-                const data = await response.json();
+// Load announcements from the server
+async function loadAnnouncements() {
+    try {
+        const response = await fetch('http://localhost:5000/api/announcements');
+        const data = await response.json();
 
-                if (data.success) {
-                    const announcementList = document.getElementById('announcement-list');
-                    announcementList.innerHTML = ''; // Clear existing announcements
+        if (data.success) {
+            const announcementList = document.getElementById('announcement-list');
+            announcementList.innerHTML = ''; // Clear existing announcements
 
-                    data.announcements.forEach(announcement => {
-                        const item = document.createElement('div');
-                        item.classList.add('announcement-item');
-                        item.innerHTML = `
-                            <h3>${announcement.title}</h3>
-                            <p>${announcement.content}</p>
-                            <p class="announcement-author">Posted by: ${announcement.author.name}</p>
-                        `;
-                        announcementList.appendChild(item);
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading announcements:', error);
-            }
+            data.announcements.forEach(announcement => {
+                const item = document.createElement('div');
+                item.classList.add('announcement-item');
+                item.innerHTML = `
+                    <h3>${announcement.title}</h3>
+                    <p>${announcement.content}</p>
+                    <p class="announcement-author">Posted by: ${announcement.author.name}</p>
+                `;
+                announcementList.appendChild(item);
+            });
+        } else {
+            console.error('Failed to fetch announcements:', data.message);
         }
+    } catch (error) {
+        console.error('Error loading announcements:', error);
+    }
+}
 
         // Handle announcement form submission
         document.getElementById('announcementForm').addEventListener('submit', async function (e) {
@@ -399,6 +446,7 @@
 
                 if (data.success) {
                     alert('Announcement created successfully!');
+                    closeModal();
                     loadAnnouncements(); // Reload announcements
                 } else {
                     alert('Failed to create announcement: ' + data.message);
@@ -419,20 +467,35 @@
         // Add event listeners for logout
         document.getElementById('logout').addEventListener('click', handleLogout);
 
+        // Function to open modal
+        function openModal() {
+            document.getElementById('announcementModal').style.display = 'block';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('announcementModal').style.display = 'none';
+        }
+
+        // Add event listener for post announcement button
+        document.getElementById('post-announcement-btn').addEventListener('click', openModal);
+
         // Check login status on page load and show user info if logged in
         document.addEventListener('DOMContentLoaded', async function () {
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
-
+        
             if (user) {
                 document.getElementById('user-profile').style.display = 'flex';
                 document.getElementById('username').innerText = user.name;
                 document.getElementById('userAvatar').src = user.avatar || 'images/avatar.png';
-
+        
                 // Load topics for the announcement form
                 try {
-                    const response = await fetch('http://localhost:5000/api/topics');
+                    const response = await fetch('http://localhost:5000/api/topics', {
+                        headers: { 'Authorization': `Bearer ${user.token}` }
+                    });
                     const data = await response.json();
-
+        
                     if (data.success) {
                         const topicSelect = document.getElementById('topic');
                         data.topics.forEach(topic => {
@@ -448,6 +511,23 @@
             } else {
                 window.location.href = 'login.html';
             }
+        });
+        
+
+        // Add search functionality to announcements
+        document.getElementById('announcement-search').addEventListener('input', function (e) {
+            const searchValue = e.target.value.toLowerCase();
+            const announcements = document.querySelectorAll('.announcement-item');
+
+            announcements.forEach(announcement => {
+                const title = announcement.querySelector('h3').innerText.toLowerCase();
+                const content = announcement.querySelector('p').innerText.toLowerCase();
+                if (title.includes(searchValue) || content.includes(searchValue)) {
+                    announcement.style.display = 'block';
+                } else {
+                    announcement.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
