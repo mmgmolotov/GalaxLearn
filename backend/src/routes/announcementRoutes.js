@@ -1,5 +1,3 @@
-// src/routes/announcementRoutes.js
-
 const express = require('express');
 const Announcement = require('../models/Announcement');
 const Topic = require('../models/Topic');
@@ -10,10 +8,14 @@ const router = express.Router();
 // Fetch all announcements
 router.get('/announcements', async (req, res) => {
     try {
-        const announcements = await Announcement.find().populate('author', 'name').populate('topic', 'name');
+        console.log('Announcement Model:', Announcement); // Log to verify the import
+        const announcements = await Announcement.find()
+            .populate('author', 'name')
+            .populate('topic', 'name');
         res.json({ success: true, announcements });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server Error', error });
+        console.error('Error fetching announcements:', error);
+        res.status(500).json({ success: false, message: 'Server Error', error: error.message || error });
     }
 });
 
@@ -25,7 +27,8 @@ router.post('/announcements', verifyUser, async (req, res) => {
         const newAnnouncement = new Announcement({
             title,
             content,
-            author: req.user.id,
+            author: req.user._id,
+            authorModel: req.user.role === 'teacher' ? 'Teacher' : 'Student',
             topic: topicId,
             customTopic
         });
@@ -46,6 +49,7 @@ router.get('/topics', async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to fetch topics', error });
     }
 });
+
 // Add a new topic
 router.post('/topics', verifyUser, async (req, res) => {
     const { name } = req.body;
