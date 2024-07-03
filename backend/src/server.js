@@ -1,5 +1,3 @@
-// src/server.js
-
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,6 +6,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chatRoutes'); // Import chatRoutes
 const announcementRoutes = require('./routes/announcementRoutes'); // Import announcementRoutes
 
 dotenv.config();
@@ -23,6 +22,7 @@ app.use(morgan('dev'));
 // Routes
 app.use('/api/auth', authRoutes); // Authentication routes
 app.use('/api', userRoutes);      // User routes
+app.use('/api', chatRoutes);      // Chat routes
 app.use('/api', announcementRoutes); // Announcement routes
 
 // Database Connection
