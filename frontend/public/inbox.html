@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox - GalaxLearn</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="css/inbox.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="lobby.html" class="brand">GalaxLearn</a>
+        <div class="user-info" id="user-profile">
+            <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
+            <span class="username" id="username">User Name</span>
+            <a href="#" id="logout">LOGOUT</a>
+        </div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="conversation-list">
+            <!-- Conversations will be dynamically loaded here -->
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="chat-header">
+                <img id="receiver-avatar" src="images/avatar.png" alt="Receiver Avatar" class="profile-avatar">
+                <h2 id="chat-with">Chat with <span id="receiver-name">User</span></h2>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Chat messages will be dynamically loaded here -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Type your message here...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io('http://localhost:5000'); // Update this with your backend's URL
+
+        // Function to load conversations
+        async function loadConversations() {
+            try {
+                const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+                const token = user.token;
+        
+                const response = await fetch('http://localhost:5000/api/conversations', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+        
+                if (data.success) {
+                    const conversationList = document.getElementById('conversation-list');
+                    conversationList.innerHTML = ''; // Clear existing conversations
+        
+                    for (const conversation of data.conversations) {
+                        const conversationElement = document.createElement('div');
+                        conversationElement.classList.add('conversation-item');
+                        conversationElement.innerHTML = `
+                            <img src="${conversation.avatar}" alt="Avatar" class="conversation-avatar">
+                            <div class="conversation-info">
+                                <h3 class="conversation-name">${conversation.name}</h3>
+                                <p class="conversation-last-message">${conversation.lastMessage}</p>
+                                <span class="conversation-timestamp">${new Date(conversation.createdAt).toLocaleString()}</span>
+                            </div>
+                        `;
+                        conversationElement.addEventListener('click', () => {
+                            if (conversation.userId) {
+                                window.location.href = `chat.html?senderId=${user.id}&receiverId=${conversation.userId}`;
+                            } else {
+                                console.error('Receiver ID is null for this conversation');
+                            }
+                        });
+                        conversationList.appendChild(conversationElement);
+                    }
+                } else {
+                    console.error('Failed to load conversations:', data.message);
+                }
+            } catch (error) {
+                console.error('Error loading conversations:', error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadConversations);
+        
+        // Handle logout
+        document.getElementById('logout').addEventListener('click', function () {
+            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
+            window.location.href = 'login.html';
+        });
+
+        // Load conversations on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+            if (user) {
+                document.getElementById('user-profile').style.display = 'flex';
+                document.getElementById('username').innerText = user.name;
+                document.getElementById('userAvatar').src = user.avatar || 'images/avatar.png';
+                loadConversations();
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

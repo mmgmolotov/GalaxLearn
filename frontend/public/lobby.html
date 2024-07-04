@@ -7,12 +7,49 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/lobby.css">
+    <style>
+        .notification {
+            position: relative;
+            display: inline-block;
+        }
+
+        .notification .dot {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            height: 12px;
+            width: 12px;
+            background-color: red;
+            border-radius: 50%;
+            display: none;
+        }
+
+        .navbar .inbox-button {
+            margin-right: 20px;
+        }
+
+        .navbar .inbox-button img {
+            width: 28px; /* Adjust the size as needed */
+            height: 28px; /* Adjust the size as needed */
+        }
+
+        .hidden-button {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <!-- Hidden Button for User Interaction -->
+    <button id="hidden-button" class="hidden-button">Hidden Button</button>
+
     <!-- Navbar -->
     <div class="navbar">
         <a href="index.html" class="brand">GalaxLearn</a>
         <div class="user-info" id="user-profile">
+            <a href="inbox.html" class="notification inbox-button">
+                <img src="images/inbox.png" alt="Inbox">
+                <span class="dot" id="inbox-notification"></span>
+            </a>
             <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
             <span class="username" id="username">User Name</span>
             <a href="#" id="logout">LOGOUT</a>
@@ -87,15 +124,24 @@
         </div>
     </div>
 
+    <!-- Audio for notification -->
+    <audio id="notification-sound" src="sound/notification.wav" preload="auto"></audio>
+
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        // Function to show content based on the sidebar selection
+        const socket = io('http://localhost:5000'); // Update this with your backend's URL
+        const notificationAudio = document.getElementById('notification-sound');
+
+        // Simulate user interaction by clicking the hidden button
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('hidden-button').click();
+        });
+
         function showContent(contentId) {
-            // Hide all sections
             document.querySelectorAll('.profile-details, .announcements-section').forEach(section => {
                 section.classList.remove('active');
             });
 
-            // Show the selected section
             if (contentId === 'profile') {
                 document.getElementById('profile-details').classList.add('active');
                 loadProfileDetails();
@@ -109,7 +155,6 @@
             }
         }
 
-        // Load the user's profile details from localStorage/sessionStorage
         function loadProfileDetails() {
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
 
@@ -127,7 +172,6 @@
             }
         }
 
-        // Load announcements from the server
         async function loadAnnouncements() {
             try {
                 const response = await fetch('http://localhost:5000/api/announcements');
@@ -135,7 +179,7 @@
 
                 if (data.success) {
                     const announcementList = document.getElementById('announcement-list');
-                    announcementList.innerHTML = ''; // Clear existing announcements
+                    announcementList.innerHTML = '';
 
                     data.announcements.forEach(announcement => {
                         const authorName = announcement.author ? announcement.author.name : 'Unknown';
@@ -150,7 +194,6 @@
                         announcementList.appendChild(item);
                     });
 
-                    // Add event listeners to contact buttons
                     document.querySelectorAll('.contact-button').forEach(button => {
                         button.addEventListener('click', handleContactButtonClick);
                     });
@@ -162,7 +205,6 @@
             }
         }
 
-        // Handle contact button click
         function handleContactButtonClick(event) {
             event.preventDefault();
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
@@ -180,7 +222,6 @@
             }
         }
 
-        // Handle announcement form submission
         document.getElementById('announcementForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
@@ -205,7 +246,7 @@
                 if (data.success) {
                     alert('Announcement created successfully!');
                     closeModal();
-                    loadAnnouncements(); // Reload announcements
+                    loadAnnouncements();
                 } else {
                     alert('Failed to create announcement: ' + data.message);
                 }
@@ -215,30 +256,24 @@
             }
         });
 
-        // Function to handle logout
         function handleLogout() {
             localStorage.removeItem('user');
             sessionStorage.removeItem('user');
             location.reload();
         }
 
-        // Add event listeners for logout
         document.getElementById('logout').addEventListener('click', handleLogout);
 
-        // Function to open modal
         function openModal() {
             document.getElementById('announcementModal').style.display = 'block';
         }
 
-        // Function to close modal
         function closeModal() {
             document.getElementById('announcementModal').style.display = 'none';
         }
 
-        // Add event listener for post announcement button
         document.getElementById('post-announcement-btn').addEventListener('click', openModal);
 
-        // Check login status on page load and show user info if logged in
         document.addEventListener('DOMContentLoaded', async function () {
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
 
@@ -247,7 +282,6 @@
                 document.getElementById('username').innerText = user.name;
                 document.getElementById('userAvatar').src = user.avatar || 'images/avatar.png';
 
-                // Load topics for the announcement form
                 try {
                     const response = await fetch('http://localhost:5000/api/topics', {
                         headers: { 'Authorization': `Bearer ${user.token}` }
@@ -271,7 +305,6 @@
             }
         });
 
-        // Add search functionality to announcements
         document.getElementById('announcement-search').addEventListener('input', function (e) {
             const searchValue = e.target.value.toLowerCase();
             const announcements = document.querySelectorAll('.announcement-item');
@@ -287,9 +320,22 @@
             });
         });
 
-        // Automatically show announcements on page load for testing
         document.addEventListener('DOMContentLoaded', function() {
             showContent('announcements');
+        });
+
+        // Handle incoming messages
+        socket.on('receiveMessage', (message) => {
+            const inboxNotification = document.getElementById('inbox-notification');
+            inboxNotification.style.display = 'block';
+
+            // Simulate user interaction by clicking the hidden button
+            document.getElementById('hidden-button').click();
+
+            // Play the sound if the user has interacted with the page
+            notificationAudio.play().catch(error => {
+                console.error('Playback failed:', error);
+            });
         });
     </script>
 </body>
