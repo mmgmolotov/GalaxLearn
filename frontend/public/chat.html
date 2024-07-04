@@ -55,24 +55,37 @@
                     const chatMessages = document.getElementById('chat-messages');
                     chatMessages.innerHTML = ''; // Clear existing messages
 
-                    data.messages.forEach(message => {
+                    for (const message of data.messages) {
                         const messageElement = document.createElement('div');
                         messageElement.classList.add('chat-message');
                         if (message.senderId === senderId) {
                             messageElement.classList.add('sent');
+                            messageElement.innerHTML = `
+                                <div class="message-header">
+                                    <img src="${user.avatar}" class="message-avatar">
+                                    <span class="message-username">${user.name}</span>
+                                </div>
+                                <div class="message-content">
+                                    <p>${message.content}</p>
+                                    <span class="timestamp">${new Date(message.createdAt).toLocaleString()}</span>
+                                </div>
+                            `;
                         } else {
+                            const receiverData = await fetchReceiverDetails(message.senderId);
                             messageElement.classList.add('received');
+                            messageElement.innerHTML = `
+                                <div class="message-header">
+                                    <img src="${receiverData.avatar}" class="message-avatar">
+                                    <span class="message-username">${receiverData.name}</span>
+                                </div>
+                                <div class="message-content">
+                                    <p>${message.content}</p>
+                                    <span class="timestamp">${new Date(message.createdAt).toLocaleString()}</span>
+                                </div>
+                            `;
                         }
-
-                        const timestamp = new Date(message.createdAt); // Create a new Date object from the timestamp
-                        const formattedDate = timestamp.toLocaleString(); // Format the date
-
-                        messageElement.innerHTML = `
-                            <p>${message.content}</p>
-                            <span class="timestamp">${formattedDate}</span>
-                        `;
                         chatMessages.appendChild(messageElement);
-                    });
+                    }
 
                     // Scroll to the bottom of the chat container
                     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -84,6 +97,23 @@
                 }
             } catch (error) {
                 console.error('Error loading chat messages:', error);
+            }
+        }
+
+        async function fetchReceiverDetails(receiverId) {
+            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+            const token = user.token;
+            const response = await fetch(`http://localhost:5000/api/users/${receiverId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                return data.user;
+            } else {
+                console.error('Failed to load receiver details:', data.message);
+                return { name: 'Unknown', avatar: 'images/avatar.png' };
             }
         }
 
