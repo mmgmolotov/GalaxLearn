@@ -1,17 +1,27 @@
-// src/routes/userRoutes.js
-
 const express = require('express');
 const router = express.Router();
 const Teacher = require('../models/Teacher');
 const Student = require('../models/Student');
 const authMiddleware = require('../middleware/authMiddleware');
 
+// Helper function to get the correct collection
+function getUserCollection(role) {
+    if (role === 'teacher') {
+        return Teacher;
+    } else if (role === 'student') {
+        return Student;
+    }
+    throw new Error('Invalid user role');
+}
+
 // Fetch user profile
 router.get('/users/:id', authMiddleware.verifyUser, async (req, res) => {
+    console.log('Fetching user with ID:', req.params.id); // Add this line
     try {
         const { id } = req.params;
         const user = await Teacher.findById(id) || await Student.findById(id);
         if (!user) {
+            console.log('User not found with ID:', id); // Add this line
             return res.status(404).json({ success: false, message: 'User not found.' });
         }
 

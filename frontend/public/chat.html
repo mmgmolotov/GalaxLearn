@@ -6,6 +6,7 @@
     <title>Chat - GalaxLearn</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="css/chat.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
     <!-- Navbar -->
@@ -34,24 +35,26 @@
     </div>
 
     <script>
+        const socket = io('http://localhost:5000'); // Update this with your backend's URL
+
         // Function to load chat messages
         async function loadChatMessages(senderId, receiverId) {
             try {
                 console.log('Fetching chat messages for:', senderId, receiverId);
                 const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
                 const token = user.token;
-        
+
                 const response = await fetch(`http://localhost:5000/api/chat/${senderId}/${receiverId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
                 const data = await response.json();
-        
+
                 if (data.success) {
                     const chatMessages = document.getElementById('chat-messages');
                     chatMessages.innerHTML = ''; // Clear existing messages
-        
+
                     data.messages.forEach(message => {
                         const messageElement = document.createElement('div');
                         messageElement.classList.add('chat-message');
@@ -60,19 +63,22 @@
                         } else {
                             messageElement.classList.add('received');
                         }
-                        
+
                         const timestamp = new Date(message.createdAt); // Create a new Date object from the timestamp
                         const formattedDate = timestamp.toLocaleString(); // Format the date
-        
+
                         messageElement.innerHTML = `
                             <p>${message.content}</p>
                             <span class="timestamp">${formattedDate}</span>
                         `;
                         chatMessages.appendChild(messageElement);
                     });
-        
+
                     // Scroll to the bottom of the chat container
                     chatMessages.scrollTop = chatMessages.scrollHeight;
+                } else if (response.status === 401 && data.message === 'Token expired') {
+                    await refreshToken();
+                    loadChatMessages(senderId, receiverId);
                 } else {
                     console.error('Failed to load chat messages:', data.message);
                 }
@@ -80,7 +86,6 @@
                 console.error('Error loading chat messages:', error);
             }
         }
-        
 
         // Function to send a new chat message
         async function sendMessage(senderId, receiverId, content) {
@@ -88,7 +93,7 @@
                 console.log('Sending message from:', senderId, 'to:', receiverId);
                 const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
                 const token = user.token;
-        
+
                 const response = await fetch('http://localhost:5000/api/chat', {
                     method: 'POST',
                     headers: {
@@ -97,11 +102,15 @@
                     },
                     body: JSON.stringify({ senderId, receiverId, content })
                 });
-        
+
                 const data = await response.json();
-        
+
                 if (data.success) {
-                    loadChatMessages(senderId, receiverId);
+                    // Emit the message to the socket
+                    socket.emit('sendMessage', { senderId, receiverId, content });
+                } else if (response.status === 401 && data.message === 'Token expired') {
+                    await refreshToken();
+                    sendMessage(senderId, receiverId, content);
                 } else {
                     console.error('Failed to send message:', data.message);
                 }
@@ -109,7 +118,6 @@
                 console.error('Error sending message:', error);
             }
         }
-        
 
         // Function to load receiver's details
         async function loadReceiverDetails(receiverId) {
@@ -129,6 +137,9 @@
                     const receiver = data.user;
                     document.getElementById('receiver-name').innerText = receiver.name;
                     document.getElementById('receiver-avatar').src = receiver.avatar || 'images/avatar.png';
+                } else if (response.status === 401 && data.message === 'Token expired') {
+                    await refreshToken();
+                    loadReceiverDetails(receiverId);
                 } else {
                     console.error('Failed to load receiver details:', data.message);
                 }
@@ -195,6 +206,11 @@
             localStorage.removeItem('user');
             sessionStorage.removeItem('user');
             window.location.href = 'login.html';
+        });
+
+        // Handle incoming messages
+        socket.on('receiveMessage', (message) => {
+            loadChatMessages(senderId, receiverId);
         });
     </script>
 </body>
