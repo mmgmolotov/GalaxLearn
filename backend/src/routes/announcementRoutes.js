@@ -8,10 +8,10 @@ const router = express.Router();
 // Fetch all announcements
 router.get('/announcements', async (req, res) => {
     try {
-        console.log('Announcement Model:', Announcement); // Log to verify the import
         const announcements = await Announcement.find()
-            .populate('author', 'name')
-            .populate('topic', 'name');
+            .populate('author', 'name country phone showCountry showPhone')
+            .populate('topic', 'name')
+            .sort({ createdAt: -1 }); // Sort by createdAt in descending order
         res.json({ success: true, announcements });
     } catch (error) {
         console.error('Error fetching announcements:', error);

@@ -7,243 +7,118 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/lobby.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <style>
-        img {
-            height: 140px;
-            width: 140px; 
-        }
-        h1 {
-            color: #32a852;
-        }
-        .mode {
-            float: right;
-        }
-        .change {
-            cursor: pointer;
-            border: 1px solid #555;
-            border-radius: 40%;
-            width: 20px;
-            text-align: center;
-            padding: 5px;
-            margin-left: 8px;
-        }
-        .dark {
-            background-color: #222;
-            color: #e6e6e6;
-        }
         body {
-            font-family: "Raleway", sans-serif;
+            font-family: 'Raleway', sans-serif;
+            background: url('images/lobby8.webp') no-repeat center center fixed;
+            background-size: cover;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-        }
-        .navbar {
-            width: 100%;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 10px 20px;
-            position: fixed;
-            top: 0;
-            z-index: 1000;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            height: 100vh;
         }
-        .navbar a {
-            text-decoration: none;
-            color: #333;
-            padding: 8px 16px;
-            display: inline-block;
-        }
-        .notification {
-            position: relative;
-        }
-        .notification .dot {
-            position: absolute;
-            top: 8px;
-            right: 10px;
-            height: 12px;
-            width: 12px;
-            background-color: red;
-            border-radius: 50%;
-            display: none;
-        }
-        .navbar .inbox-button {
-            margin-right: 20px;
-        }
-        .navbar .inbox-button img {
-            width: 28px;
-            height: 28px;
-        }
+
         .hidden-button {
             display: none;
         }
-        .navbar .username {
-            margin-right: 20px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-        .navbar .username:hover {
-            color: #007BFF;
-        }
-        .navbar .lobby-button {
-            padding: 8px 16px;
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .navbar .lobby-button:hover {
-            background-color: #0056b3;
-        }
-        .sidebar {
-            width: 200px;
-            background-color: #2c3e50;
-            color: #fff;
-            position: fixed;
-            top: 60px;
-            bottom: 0;
-            left: 0;
-            padding-top: 20px;
-            z-index: 999;
-        }
-        .sidebar a {
-            color: #fff;
-            padding: 15px 20px;
-            display: block;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        .sidebar a:hover {
-            background-color: #34495e;
-        }
-        .sidebar .active {
-            background-color: #16a085;
-        }
-        .content {
-            margin-left: 220px;
-            padding: 80px 20px 20px 20px;
-            transition: margin-left 0.3s;
-        }
-        .profile-details,
-        .announcements-section {
+
+        .settings-section {
             display: none;
         }
-        .profile-details.active,
-        .announcements-section.active {
+
+        .settings-section.active {
             display: block;
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            text-align: center;
         }
-        .profile-details img,
-        .announcements-section img {
-            border-radius: 50%;
-            height: 100px;
-            width: 100px;
-            margin-bottom: 20px;
-            object-fit: cover;
-        }
-        .profile-info {
-            font-size: 1.1em;
-            margin: 10px 0;
-        }
-        .update-button {
+
+        .announcement-section {
             margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            display: inline-block;
-            transition: background-color 0.3s;
         }
-        .update-button:hover {
-            background-color: #0056b3;
-        }
-        .announcement-form {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        .announcement-form h2 {
-            margin-bottom: 20px;
-        }
-        .announcement-form .form-group {
-            margin-bottom: 15px;
-        }
-        .announcement-form .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .announcement-form .form-group input[type="text"],
-        .announcement-form .form-group textarea,
-        .announcement-form .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .announcement-form .form-group textarea {
-            resize: vertical;
-        }
-        .announcement-form button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            border: none;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .announcement-form button:hover {
-            background-color: #0056b3;
-        }
-        .announcement-list {
-            max-width: 800px;
-            margin: 40px auto;
-        }
-        .announcement-item {
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .announcement-item h3 {
-            margin: 0;
+
+        .announcement-title {
             font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
         }
-        .announcement-item p {
+
+        .announcement-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .announcement-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            width: calc(50% - 10px);
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .announcement-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .announcement-item h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+
+        .announcement-topic {
+            color: purple;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .announcement-date {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .announcement-author, .announcement-content {
             margin: 10px 0;
         }
-        .announcement-item .announcement-author {
+
+        .announcement-author-role {
             color: #666;
             font-size: 0.9em;
         }
-        .open-button {
-            background-color: #15F5EE;
-            color: white;
-            padding: 16px 20px;
-            border: none;
-            cursor: pointer;
-            opacity: 0.8;
-            position: fixed;
-            bottom: 23px;
-            right: 28px;
-            width: 280px;
+
+        .announcement-type {
+            font-size: 0.9em;
+            color: #666;
         }
+
+        .items-per-page {
+            display: none;
+        }
+
+        .open-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .open-button:hover {
+            background-color: #0056b3;
+        }
+
         .form-popup {
             display: none;
             position: fixed;
@@ -251,33 +126,119 @@
             right: 15px;
             border: 3px solid #f1f1f1;
             z-index: 9;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .form-container {
             max-width: 300px;
-            padding: 10px;
-            background-color: white;
         }
-        .form-container input[type=text], .form-container input[type=password] {
+
+        .form-container input[type="text"], .form-container textarea, .form-container select {
             width: 100%;
-            padding: 15px;
-            margin: 5px 0 22px 0;
+            padding: 10px;
+            margin: 5px 0 10px 0;
             border: none;
             background: #f1f1f1;
         }
-        .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+
+        .form-container input[type="text"]:focus, .form-container textarea:focus, .form-container select:focus {
             background-color: #ddd;
             outline: none;
         }
+
+        .form-container .btn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
         .form-container .cancel {
             background-color: red;
         }
+
         .form-container .btn:hover, .open-button:hover {
             opacity: 1;
+        }
+
+        .contact-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: royalblue;
+            color: white;
+            padding: 0.7em 1em;
+            padding-left: 0.9em;
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+        .contact-button span {
+            display: block;
+            margin-left: 0.3em;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .contact-button svg {
+            display: block;
+            transform-origin: center center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .contact-button:hover .svg-wrapper {
+            animation: fly-1 0.6s ease-in-out infinite alternate;
+        }
+
+        .contact-button:hover svg {
+            transform: translateX(1.2em) rotate(45deg) scale(1.1);
+        }
+
+        .contact-button:hover span {
+            transform: translateX(5em);
+        }
+
+        .contact-button:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes fly-1 {
+            from {
+                transform: translateY(0.1em);
+            }
+
+            to {
+                transform: translateY(-0.1em);
+            }
+        }
+
+        .main-text-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            width: 80%;
+            margin: 20px auto;
+            box-sizing: border-box;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
     </style>
 </head>
 <body>
+    <!-- Hidden Button for User Interaction -->
     <button id="hidden-button" class="hidden-button">Hidden Button</button>
+
+    <!-- Navbar -->
     <div class="navbar">
         <a href="index.html" class="brand">GalaxLearn</a>
         <div class="user-info" id="user-profile">
@@ -287,9 +248,11 @@
             </a>
             <img src="images/avatar.png" alt="Avatar" class="profile-avatar" id="userAvatar">
             <span class="username" id="username">User Name</span>
-            <a href="#" id="logout">LOGOUT</a>
+            <a href="#" id="logout" class="logout-button">LOGOUT</a>
         </div>
     </div>
+
+    <!-- Sidebar -->
     <div class="sidebar">
         <a href="#" onclick="showContent('announcements')">View Announcements</a>
         <a href="#" onclick="showContent('profile')">View Profile</a>
@@ -298,9 +261,15 @@
         <a href="#" onclick="showContent('faq')">FAQ</a>
         <a href="#" onclick="showContent('community')">Community</a>
     </div>
+
+    <!-- Main Content -->
     <div class="content">
-        <h1 id="main-title">Welcome to the Lobby</h1>
-        <p id="main-description">Select an option from the menu to view more details.</p>
+        <div id="main-text-container" class="main-text-container">
+            <h1 id="main-title">Welcome to the Lobby</h1>
+            <p id="main-description">It's time to join the learning orbit.</p>
+        </div>
+
+        <!-- Profile Details Section -->
         <div id="profile-details" class="profile-details">
             <img id="profile-avatar" src="images/avatar.png" alt="Profile Avatar">
             <div class="profile-info" id="profile-name">Name: User Name</div>
@@ -311,11 +280,25 @@
             <div class="profile-info" id="profile-phone">Phone: Unknown</div>
             <a href="profile.html" class="update-button">Update Profile</a>
         </div>
+
+        <!-- Announcements Section -->
         <div id="announcements" class="announcements-section">
-            <div id="announcement-list" class="announcement-list"></div>
-            <button class="open-button" onclick="openForm()">New Announce</button>
+            <input type="text" id="announcement-search" placeholder="Search announcements...">
+            <div class="announcement-section">
+                <div class="announcement-title">My Announcements</div>
+                <div id="my-announcement-list" class="announcement-list">
+                    <!-- My Announcements will be loaded here -->
+                </div>
+            </div>
+            <div class="announcement-section">
+                <div class="announcement-title">Members Announcements</div>
+                <div id="members-announcement-list" class="announcement-list">
+                    <!-- Members Announcements will be loaded here -->
+                </div>
+            </div>
+            <button id="post-announcement-btn" class="open-button" onclick="openForm()">Post Announcement</button>
             <div class="form-popup" id="myForm">
-                <div class="announcement-form">
+                <div class="form-container">
                     <h2>Create Announcement</h2>
                     <form id="announcementForm">
                         <div class="form-group">
@@ -328,58 +311,81 @@
                         </div>
                         <div class="form-group">
                             <label for="topic">Select Topic:</label>
-                            <select id="topic" name="topic" required></select>
+                            <select id="topic" name="topic">
+                                <!-- Topics will be dynamically loaded here -->
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="customTopic">Or Add Custom Topic:</label>
                             <input type="text" id="customTopic" name="customTopic">
                         </div>
-                        <button type="submit">Submit</button>
+                        <div class="form-group">
+                            <label for="type">Session Type:</label>
+                            <select id="type" name="type" required>
+                                <option value="online">Online</option>
+                                <option value="1to1">1-to-1</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">Submit</button>
                         <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="mode">
-            Dark mode:             
-            <span class="change">OFF</span>
+
+        <!-- Settings Section -->
+        <div id="settings" class="settings-section">
+            <h2>Settings</h2>
+            <form id="settingsForm">
+                <div class="form-group">
+                    <input type="checkbox" id="showCountry" name="showCountry">
+                    <label for="showCountry">Show Country in Announcements</label>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="showPhone" name="showPhone">
+                    <label for="showPhone">Show Phone Number in Announcements</label>
+                </div>
+                <button type="submit" class="btn">Save Settings</button>
+            </form>
         </div>
     </div>
+
+    <!-- Audio for notification -->
     <audio id="notification-sound" src="sound/notification.wav" preload="auto"></audio>
+
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        $(".change").on("click", function() {
-            if ($("body").hasClass("dark")) {
-                $("body").removeClass("dark");
-                $(".change").text("OFF");
-            } else {
-                $("body").addClass("dark");
-                $(".change").text("ON");
-            }
-        });
         const socket = io('http://localhost:5000'); // Update this with your backend's URL
         const notificationAudio = document.getElementById('notification-sound');
+
+        // Simulate user interaction by clicking the hidden button
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('hidden-button').click();
         });
+
         function showContent(contentId) {
-            document.querySelectorAll('.profile-details, .announcements-section').forEach(section => {
+            document.querySelectorAll('.profile-details, .announcements-section, .settings-section').forEach(section => {
                 section.classList.remove('active');
             });
+
             if (contentId === 'profile') {
                 document.getElementById('profile-details').classList.add('active');
                 loadProfileDetails();
-                document.getElementById('main-title').style.display = 'none';
-                document.getElementById('main-description').style.display = 'none';
+                document.getElementById('main-text-container').style.display = 'none';
             } else if (contentId === 'announcements') {
                 document.getElementById('announcements').classList.add('active');
                 loadAnnouncements();
-                document.getElementById('main-title').style.display = 'none';
-                document.getElementById('main-description').style.display = 'none';
+                document.getElementById('main-text-container').style.display = 'none';
+            } else if (contentId === 'settings') {
+                document.getElementById('settings').classList.add('active');
+                loadSettings();
+                document.getElementById('main-text-container').style.display = 'none';
             }
         }
+
         function loadProfileDetails() {
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+
             if (user) {
                 document.getElementById('profile-avatar').src = user.avatar || 'images/avatar.png';
                 document.getElementById('profile-name').innerText = `Name: ${user.name}`;
@@ -393,24 +399,56 @@
                 window.location.href = 'login.html';
             }
         }
+
         async function loadAnnouncements() {
             try {
-                const response = await fetch('http://localhost:5000/api/announcements');
+                const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+                const response = await fetch('http://localhost:5000/api/announcements', {
+                    headers: { 'Authorization': `Bearer ${user.token}` }
+                });
                 const data = await response.json();
+
                 if (data.success) {
-                    const announcementList = document.getElementById('announcement-list');
-                    announcementList.innerHTML = '';
+                    const myAnnouncementList = document.getElementById('my-announcement-list');
+                    const membersAnnouncementList = document.getElementById('members-announcement-list');
+                    myAnnouncementList.innerHTML = '';
+                    membersAnnouncementList.innerHTML = '';
+
                     data.announcements.forEach(announcement => {
+                        const isOwnAnnouncement = announcement.author._id === user.id;
+                        const authorName = announcement.author ? announcement.author.name : 'Unknown';
+                        const authorRole = announcement.author.role === 'teacher' ? 'Teacher' : 'Student';
+                        const sessionType = announcement.type ? announcement.type.charAt(0).toUpperCase() + announcement.type.slice(1) : 'Unknown';
                         const item = document.createElement('div');
                         item.classList.add('announcement-item');
                         item.innerHTML = `
                             <h3>${announcement.title}</h3>
-                            <p>${announcement.content}</p>
-                            <p class="announcement-author">Posted by: ${announcement.author ? announcement.author.name : 'Unknown'}</p>
-                            <a href="#" class="contact-button" data-author-id="${announcement.author ? announcement.author._id : ''}">Contact</a>
+                            <p class="announcement-topic">${announcement.topic ? announcement.topic.name : announcement.customTopic}</p>
+                            <p class="announcement-content">${announcement.content}</p>
+                            <p class="announcement-author">Posted by: ${authorName} <span class="announcement-author-role">(${authorRole})</span></p>
+                            <p class="announcement-type">Session Type: ${sessionType}</p>
+                            ${announcement.author.showCountry ? `<p>Country: ${announcement.author.country || 'Unknown'}</p>` : ''}
+                            ${announcement.author.showPhone ? `<p>Phone: ${announcement.author.phone || 'Unknown'}</p>` : ''}
+                            <span class="announcement-date">${new Date(announcement.createdAt).toLocaleString()}</span>
+                            ${!isOwnAnnouncement ? `<button class="contact-button" data-author-id="${announcement.author ? announcement.author._id : ''}">
+                                <div class="svg-wrapper-1">
+                                    <div class="svg-wrapper">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                            <path fill="none" d="M0 0h24v24H0z"></path>
+                                            <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span>Contact</span>
+                            </button>` : ''}
                         `;
-                        announcementList.appendChild(item);
+                        if (isOwnAnnouncement) {
+                            myAnnouncementList.appendChild(item);
+                        } else {
+                            membersAnnouncementList.appendChild(item);
+                        }
                     });
+
                     document.querySelectorAll('.contact-button').forEach(button => {
                         button.addEventListener('click', handleContactButtonClick);
                     });
@@ -421,6 +459,7 @@
                 console.error('Error loading announcements:', error);
             }
         }
+
         function handleContactButtonClick(event) {
             event.preventDefault();
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
@@ -429,6 +468,7 @@
                 window.location.href = 'login.html';
                 return;
             }
+
             const authorId = event.target.getAttribute('data-author-id');
             if (authorId) {
                 window.location.href = `chat.html?senderId=${user.id}&receiverId=${authorId}`;
@@ -436,13 +476,22 @@
                 alert('Author ID missing!');
             }
         }
+
         document.getElementById('announcementForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
             const topicId = document.getElementById('topic').value;
             const customTopic = document.getElementById('customTopic').value;
+            const type = document.getElementById('type').value;
+
+            if (!topicId && !customTopic) {
+                alert('Please select a topic or add a custom topic.');
+                return;
+            }
+
             try {
                 const response = await fetch('http://localhost:5000/api/announcements', {
                     method: 'POST',
@@ -450,9 +499,11 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${user.token}`
                     },
-                    body: JSON.stringify({ title, content, topicId, customTopic })
+                    body: JSON.stringify({ title, content, topicId, customTopic, type })
                 });
+
                 const data = await response.json();
+
                 if (data.success) {
                     alert('Announcement created successfully!');
                     closeForm();
@@ -465,23 +516,37 @@
                 alert('Error creating announcement');
             }
         });
+
         function handleLogout() {
             localStorage.removeItem('user');
             sessionStorage.removeItem('user');
             location.reload();
         }
+
         document.getElementById('logout').addEventListener('click', handleLogout);
+
+        function openForm() {
+            document.getElementById('myForm').style.display = 'block';
+        }
+
+        function closeForm() {
+            document.getElementById('myForm').style.display = 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', async function () {
             const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+
             if (user) {
                 document.getElementById('user-profile').style.display = 'flex';
                 document.getElementById('username').innerText = user.name;
                 document.getElementById('userAvatar').src = user.avatar || 'images/avatar.png';
+
                 try {
                     const response = await fetch('http://localhost:5000/api/topics', {
                         headers: { 'Authorization': `Bearer ${user.token}` }
                     });
                     const data = await response.json();
+
                     if (data.success) {
                         const topicSelect = document.getElementById('topic');
                         data.topics.forEach(topic => {
@@ -494,16 +559,20 @@
                 } catch (error) {
                     console.error('Error loading topics:', error);
                 }
+
+                loadAnnouncements();
             } else {
                 window.location.href = 'login.html';
             }
         });
+
         document.getElementById('announcement-search').addEventListener('input', function (e) {
             const searchValue = e.target.value.toLowerCase();
             const announcements = document.querySelectorAll('.announcement-item');
+
             announcements.forEach(announcement => {
                 const title = announcement.querySelector('h3').innerText.toLowerCase();
-                const content = announcement.querySelector('p').innerText.toLowerCase();
+                const content = announcement.querySelector('.announcement-content').innerText.toLowerCase();
                 if (title.includes(searchValue) || content.includes(searchValue)) {
                     announcement.style.display = 'block';
                 } else {
@@ -511,23 +580,63 @@
                 }
             });
         });
-        document.addEventListener('DOMContentLoaded', function() {
-            showContent('announcements');
+
+        // Load settings
+        function loadSettings() {
+            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+            document.getElementById('showCountry').checked = user.showCountry || false;
+            document.getElementById('showPhone').checked = user.showPhone || false;
+        }
+
+        // Save settings
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user'));
+
+            const settings = {
+                showCountry: document.getElementById('showCountry').checked,
+                showPhone: document.getElementById('showPhone').checked
+            };
+
+            fetch(`http://localhost:5000/api/user/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Settings updated successfully!');
+                    user.showCountry = settings.showCountry;
+                    user.showPhone = settings.showPhone;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    sessionStorage.setItem('user', JSON.stringify(user));
+                } else {
+                    alert('Failed to update settings: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating settings:', error);
+                alert('Error updating settings');
+            });
         });
+
+        // Handle incoming messages
         socket.on('receiveMessage', (message) => {
             const inboxNotification = document.getElementById('inbox-notification');
             inboxNotification.style.display = 'block';
+
+            // Simulate user interaction by clicking the hidden button
             document.getElementById('hidden-button').click();
+
+            // Play the sound if the user has interacted with the page
             notificationAudio.play().catch(error => {
                 console.error('Playback failed:', error);
             });
         });
-        function openForm() {
-            document.getElementById("myForm").style.display = "block";
-        }
-        function closeForm() {
-            document.getElementById("myForm").style.display = "none";
-        }
     </script>
 </body>
 </html>

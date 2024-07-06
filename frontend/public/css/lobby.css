@@ -1,4 +1,75 @@
 /* General Styles */
+/* Custom Scrollbar for WebKit Browsers */
+::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f4f4f4; /* Background color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #3a0437; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded corners of the scrollbar thumb */
+    border: 5px solid #f4f4f4; /* Space around the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #0056b3; /* Hover color for the scrollbar thumb */
+}
+
+/* Custom Scrollbar for Firefox */
+* {
+    scrollbar-width: thin; /* Makes the scrollbar thinner */
+    scrollbar-color: #2f0e37 #f4f4f4; /* Color of the thumb and track */
+}
+
+/* Add the custom scrollbar to specific elements */
+.sidebar,
+.content,
+.announcement-list,
+.profile-details,
+.announcements-section {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #007BFF #f4f4f4;
+}
+
+/* Styling for elements with overflow */
+.sidebar::-webkit-scrollbar,
+.content::-webkit-scrollbar,
+.announcement-list::-webkit-scrollbar,
+.profile-details::-webkit-scrollbar,
+.announcements-section::-webkit-scrollbar {
+    width: 12px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.content::-webkit-scrollbar-track,
+.announcement-list::-webkit-scrollbar-track,
+.profile-details::-webkit-scrollbar-track,
+.announcements-section::-webkit-scrollbar-track {
+    background: #f4f4f4;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.content::-webkit-scrollbar-thumb,
+.announcement-list::-webkit-scrollbar-thumb,
+.profile-details::-webkit-scrollbar-thumb,
+.announcements-section::-webkit-scrollbar-thumb {
+    background-color: #007BFF;
+    border-radius: 10px;
+    border: 3px solid #f4f4f4;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover,
+.content::-webkit-scrollbar-thumb:hover,
+.announcement-list::-webkit-scrollbar-thumb:hover,
+.profile-details::-webkit-scrollbar-thumb:hover,
+.announcements-section::-webkit-scrollbar-thumb:hover {
+    background-color: #0056b3;
+}
+
 body {
     font-family: "Raleway", sans-serif;
     margin: 0;
@@ -62,8 +133,8 @@ body {
 }
 .sidebar {
     width: 200px;
-    background-color: #2c3e50;
-    color: #fff;
+    background-color: #222841;
+    color: #ffffff;
     position: fixed;
     top: 60px;
     bottom: 0;
@@ -72,17 +143,17 @@ body {
     z-index: 999;
 }
 .sidebar a {
-    color: #fff;
+    color: #cdcbcb;
     padding: 15px 20px;
     display: block;
     text-decoration: none;
     transition: background-color 0.3s;
 }
 .sidebar a:hover {
-    background-color: #34495e;
+    background-color: #86b2b2;
 }
 .sidebar .active {
-    background-color: #16a085;
+    background-color: #000000;
 }
 .content {
     margin-left: 220px; /* Adjusted for sidebar width */
@@ -274,4 +345,215 @@ body {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.notification {
+    position: relative;
+    display: inline-block;
+}
+
+.notification .dot {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    height: 12px;
+    width: 12px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+}
+
+.navbar .inbox-button {
+    margin-right: 20px;
+}
+
+.navbar .inbox-button img {
+    width: 28px; /* Adjust the size as needed */
+    height: 28px; /* Adjust the size as needed */
+}
+
+.hidden-button {
+    display: none;
+}
+.notification {
+    position: relative;
+    display: inline-block;
+}
+
+.notification .dot {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    height: 12px;
+    width: 12px;
+    background-color: red;
+    border-radius: 50%;
+    display: none;
+}
+
+.navbar .inbox-button {
+    margin-right: 20px;
+}
+
+.navbar .inbox-button img {
+    width: 28px; /* Adjust the size as needed */
+    height: 28px; /* Adjust the size as needed */
+}
+
+.hidden-button {
+    display: none;
+}
+
+.mode {
+    float: right;
+}
+
+.change {
+    cursor: pointer;
+    border: 1px solid #555;
+    border-radius: 40%;
+    width: 20px;
+    text-align: center;
+    padding: 5px;
+    margin-left: 8px;
+}
+
+.dark {
+    background-color: #222;
+    color: #e6e6e6;
+}
+
+body {
+    font-family: "Raleway", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.open-button {
+    background-color: #141e1e;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 23px;
+    right: 28px;
+    width: 280px;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+}
+
+.form-container input[type=text], .form-container input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+}
+
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+.form-container .cancel {
+    background-color: red;
+}
+
+.form-container .btn:hover, .open-button:hover {
+    opacity: 1;
+}
+.navbar .logout-button {
+    margin-right: 10px; /* Adjust this value as needed to move it left */
+}
+.navbar .logout-button {
+    margin-right: 10px; /* Adjust this value as needed to move it left */
+}
+.navbar .user-info {
+    margin-right: 20px; /* Adjust this value as needed */
+}
+
+.announcement-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 20px;
+    width: calc(50% - 10px);
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.contact-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: royalblue;
+    color: white;
+    padding: 0.7em 1em;
+    padding-left: 0.9em;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.contact-button span {
+    display: block;
+    margin-left: 0.3em;
+    transition: all 0.3s ease-in-out;
+}
+
+.contact-button svg {
+    display: block;
+    transform-origin: center center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.contact-button:hover .svg-wrapper {
+    animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.contact-button:hover svg {
+    transform: translateX(1.2em) rotate(45deg) scale(1.1);
+}
+
+.contact-button:hover span {
+    transform: translateX(5em);
+}
+
+.contact-button:active {
+    transform: scale(0.95);
+}
+
+@keyframes fly-1 {
+    from {
+        transform: translateY(0.1em);
+    }
+
+    to {
+        transform: translateY(-0.1em);
+    }
 }
