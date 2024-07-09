@@ -129,6 +129,8 @@
             background-color: #fff;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         .form-container {
@@ -319,13 +321,6 @@
                             <label for="customTopic">Or Add Custom Topic:</label>
                             <input type="text" id="customTopic" name="customTopic">
                         </div>
-                        <div class="form-group">
-                            <label for="type">Session Type:</label>
-                            <select id="type" name="type" required>
-                                <option value="online">Online</option>
-                                <option value="1to1">1-to-1</option>
-                            </select>
-                        </div>
                         <button type="submit" class="btn">Submit</button>
                         <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
                     </form>
@@ -417,16 +412,13 @@
                     data.announcements.forEach(announcement => {
                         const isOwnAnnouncement = announcement.author._id === user.id;
                         const authorName = announcement.author ? announcement.author.name : 'Unknown';
-                        const authorRole = announcement.author.role === 'teacher' ? 'Teacher' : 'Student';
-                        const sessionType = announcement.type ? announcement.type.charAt(0).toUpperCase() + announcement.type.slice(1) : 'Unknown';
                         const item = document.createElement('div');
                         item.classList.add('announcement-item');
                         item.innerHTML = `
                             <h3>${announcement.title}</h3>
                             <p class="announcement-topic">${announcement.topic ? announcement.topic.name : announcement.customTopic}</p>
                             <p class="announcement-content">${announcement.content}</p>
-                            <p class="announcement-author">Posted by: ${authorName} <span class="announcement-author-role">(${authorRole})</span></p>
-                            <p class="announcement-type">Session Type: ${sessionType}</p>
+                            <p class="announcement-author">Posted by: ${authorName}</p>
                             ${announcement.author.showCountry ? `<p>Country: ${announcement.author.country || 'Unknown'}</p>` : ''}
                             ${announcement.author.showPhone ? `<p>Phone: ${announcement.author.phone || 'Unknown'}</p>` : ''}
                             <span class="announcement-date">${new Date(announcement.createdAt).toLocaleString()}</span>
@@ -485,7 +477,6 @@
             const content = document.getElementById('content').value;
             const topicId = document.getElementById('topic').value;
             const customTopic = document.getElementById('customTopic').value;
-            const type = document.getElementById('type').value;
 
             if (!topicId && !customTopic) {
                 alert('Please select a topic or add a custom topic.');
@@ -499,7 +490,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${user.token}`
                     },
-                    body: JSON.stringify({ title, content, topicId, customTopic, type })
+                    body: JSON.stringify({ title, content, topicId, customTopic })
                 });
 
                 const data = await response.json();
